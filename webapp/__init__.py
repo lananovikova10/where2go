@@ -1,19 +1,19 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
 from webapp.config import Config
 from webapp.forms import LoginForm
 
+
+db = SQLAlchemy()  # creating db instance
 app = Flask(__name__)
 app.config.from_object(Config)
 
-@app.route("/")
-def display():
-    title = 'Куда поехать из России'
-    return render_template('index.html', page_title = title)
+def create_app():
+    db.init_app(app)  #  bounding app and bd
+    migrate = Migrate(app, db)  # bounfing app, bd and migration instance
 
-@app.route('/login')
-def login():
-    form = LoginForm()
-    return render_template('login.html', title='Sign In', form=form)
+    return app
 
-if __name__=="__main__":
-    app.run(debug=True)
+from webapp import routes, model

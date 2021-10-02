@@ -1,15 +1,16 @@
-from sqlalchemy import Column, Integer, String
+# from sqlalchemy import Column, Integer, String
 
-from db import Base, engine
-
-class Country(Base):
+from webapp import db
+class Country(db.Model):
     __tablename__ = 'countries'
-    id = Column(Integer, primary_key=True)
-    country_code = Column(String)
-    country_name = Column(String)
+    id = db.Column(db.Integer, primary_key=True)
+    country_code = db.Column(db.String)
+    country_name = db.Column(db.String)
 
     def __repr__(self):
         return f'<User {self.name} {self.email}>'
 
-if __name__ == "__main__":
-    Base.metadata.create_all(bind=engine)
+
+class User(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
