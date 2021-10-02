@@ -1,10 +1,21 @@
 from flask import Flask, render_template
+<<<<<<< HEAD
 from config import Config
 from forms import LoginForm
+=======
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, migrate
 
+from webapp.config import Config
+from webapp.forms import LoginForm
+>>>>>>> main
+
+db = SQLAlchemy()  # creating db instance
 app = Flask(__name__)
+migrate = Migrate()
 app.config.from_object(Config)
 
+<<<<<<< HEAD
 
 @app.route("/")
 
@@ -19,6 +30,9 @@ def display():
 def login():
     form = LoginForm()
     return render_template('login.html', title='Sign In', form=form)
+=======
+db.init_app(app)  #  bounding app and bd
+migrate.init_app(app, db)  # bounfing app, bd and migration instance
+>>>>>>> main
 
-if __name__=="__main__":
-    app.run(debug=True)
+from webapp import routes, model
