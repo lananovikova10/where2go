@@ -1,6 +1,6 @@
 from flask import Flask, render_template
-from webapp.config import Config
-from webapp.forms import LoginForm
+from config import Config
+from forms import LoginForm
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -11,7 +11,9 @@ app.config.from_object(Config)
 def display():
     title = 'Куда поехать из России'
     country_name = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 'Ангола', 'Андорра', 'Антигуа и Барбуда']
-    return render_template('index.html', page_title = title, country_name = country_name)
+    country_code = ['AU', 'AU2', 'AZZ', 'ALD', 'ALZ', 'ANG', 'ANO', 'AAB']
+    quant = len(country_name)
+    return render_template('index.html', page_title = title, quant = quant, country_name = country_name, country_code = country_code)
 
 @app.route('/login')
 def login():
