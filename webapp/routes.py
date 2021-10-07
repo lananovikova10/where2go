@@ -9,9 +9,6 @@ from flask_login import LoginManager, current_user, login_user, logout_user
 @app.route('/')
 def display():
     title = 'Куда поехать теперь?'
-    # country_name = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 'Ангола', 'Андорра', 'Антигуа и Барбуда']
-    # country_code = ['AU', 'AU2', 'AZZ', 'ALD', 'ALZ', 'ANG', 'ANO', 'AAB']
-    # quant = len(country_name)
     country_choosed = CounryChoose()
     return render_template('index.html', page_title = title, form = country_choosed)
 
@@ -23,8 +20,8 @@ def login():
 
 
 @app.route('/process_country', methods=['GET', 'POST'])
+# подготовлен блок для проверки авторизации
 # def check_signin():
-#     if 2 != 2:
 #     #if not current_user.is_authenticated:
 #         return process_country()
 #     else:
@@ -37,17 +34,15 @@ def process_country():
     form = CounryChoose()
     if form.validate_on_submit():
         form.country_dep
-        # создать новый экземпляр модели
         select_dep = request.form.get('country_dep')
         select_arr = request.form.get('country_arr')
     if select_dep != select_arr:
         choice = UserRequest(user_id=1, country_dep = select_dep, country_arr = select_arr)
-        
-        # # if current_user.is_authenticated:
-        # #     choice.user_id = current_user.id
+        # если авторизирован - по проверке выше, брать user_id = current_user.id
+
         db.session.add(choice)
         db.session.commit()
-        flash(f'получилось, из {select_dep} в {select_arr}')
+        #flash(f'получилось, из {select_dep} в {select_arr}')
         return redirect(url_for('country_request'))
     else: 
         flash('одинаковые страны, попробуйте еще')
@@ -56,12 +51,15 @@ def process_country():
 @app.route('/country_request')
 def country_request():
     title = f'Актуальная информация по странам'
-    dep = UserRequest.query.first().country_dep
-    arr = UserRequest.query.first().country_arr
+    #ожидается проверка на current user, чтобы делать фильтр по нему
+    que = UserRequest.query.filter(UserRequest.user_id==1).order_by(UserRequest.id.desc()).limit(1)
+    dep = que[0].country_dep
+    arr = que[0].country_arr
     return render_template('country_request.html', title=title, country_dep=dep, country_arr=arr)
 
 @app.route('/admin')
 def admin():
+    # добавить проверку на роль Админ
     title = f'Админка'
     users = User.query.all()
     for user in users:
