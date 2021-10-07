@@ -17,7 +17,7 @@ class User(db.Model):
     login = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(100))
-    requests = relationship("UserRequest", back_populates="users")
+    requests = relationship("UserRequest", backref='user', lazy=True)
 
     def __repr__(self):
         return f'<User {self.login} {self.email}>'
@@ -26,9 +26,9 @@ class UserRequest(db.Model):
     __tablename__ = 'users_requests'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey('users.id'))
-    country_dep = db.Column(db.String(120), index=True, unique=True)
-    country_arr = db.Column(db.String(120), index=True, unique=True)
-    user = relationship("User", back_populates="users_requests")
+    country_dep = db.Column(db.String(120), index=True)
+    country_arr = db.Column(db.String(120), index=True)
+
 
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'

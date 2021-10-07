@@ -14,7 +14,8 @@
         <div class="container"></div>
             <div class="row">
                 <div class="col-sm-9">
-                    <h3>{{ title }}</h3>
+                    
+                    <h2>{{ title }}</h2>
                     {% with messages = get_flashed_messages() %}
                         {% if messages %}
                         <div class="alert alert-warning" role="alert">
@@ -22,14 +23,14 @@
                         </div>
                         {% endif %}
                     {% endwith %}
-                    <br><br>
-                    <p>
-                    <div class="col-sm-9">
-                        <h2>
-                    Отправление из: {{ country_dep }} <br><br>
-                    Прибытие в: {{ country_arr }}
-                        </h2>
-                    </p>
+                
+                <h4>Зарегистрированные пользователи:</h4>
+                <h5>
+                {% for user in users %}
+                        id {{ user.id }}, логин {{ user.login }}
+                {% endfor %}
+                </h5>
+
                     <h3><a href="{{ url_for('display') }}">на главную</a></h3>
                 </div>
             </div>
