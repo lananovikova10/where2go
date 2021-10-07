@@ -2,10 +2,17 @@ from flask import render_template, redirect, flash, url_for
 
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
-from webapp import app, login_manager
+from webapp import app
 
 from webapp.forms import LoginForm, RegistrationForm
-from webapp.model import db, Country, User
+from webapp.model import db, User
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 
 @app.route("/")
 def display():
@@ -17,10 +24,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('/'))
     form = LoginForm()
-    if form.validate_on_submit():
-        flash('Инициирован логин для пользователя {}, remember_me={}'.format(
-            form.username.data, form.remember_me.data))
-        return redirect('/')
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/process-login', methods=['POST'])
@@ -28,7 +31,7 @@ def process_login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(login=form.username.data).first()
-        if user and user.verify_password(form.password.data):
+        if user and user.check_password(form.password.data):
             login_user(user)
             flash('Вы вошли на сайт')
             return redirect(url_for('/'))
