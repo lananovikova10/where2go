@@ -2,5 +2,6 @@ import os
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'you-will-never-guess'
-    SQLALCHEMY_DATABASE_URI = 'postgresql://qhaxllmg:CtlAnL2FPdiSjIB4655AvaBA2q18JEUp@hattie.db.elephantsql.com/qhaxllmg'
+    # ссылка Полины
+    SQLALCHEMY_DATABASE_URI = 'postgresql://pueuxeap:3V_ALfpfKvH7XOSDHnVSq0uTQHA7PbuP@hattie.db.elephantsql.com/pueuxeap'
     SQLALCHEMY_TRACK_MODIFICATIONS = False

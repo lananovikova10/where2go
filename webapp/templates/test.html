@@ -1,0 +1,15 @@
+<div class="col-6 col-sm-6">
+    <h3>Страна назначения:</h3>
+  </div>
+
+  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+    <option selected>Выберите страну:</option>
+    {% for i in range(quant) %}
+      <option value="1">{{ country_name[i] }} ({{ country_code[i] }}) </option>
+    {% endfor %}
+  </select>
+
+</div>
+</div>
+</div>
+<button type="button" class="btn btn-primary">Поехали</button>
