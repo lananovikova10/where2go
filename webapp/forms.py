@@ -6,7 +6,6 @@ from webapp.model import User
 
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()], render_kw={"class": "form-control"})
-    email = StringField('Электронная почта', validators=[DataRequired()], render_kw={"class": "form-control"})
     password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"class": "form-control"})
     submit = SubmitField('Войти',render_kw={"class":"btn btn-primary"})
 
