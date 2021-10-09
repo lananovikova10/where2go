@@ -1,9 +1,8 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, migrate
 
 from webapp.config import Config
-from webapp.forms import LoginForm
 
 db = SQLAlchemy()  # creating db instance
 app = Flask(__name__)
