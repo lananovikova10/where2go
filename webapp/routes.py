@@ -7,14 +7,6 @@ from webapp import app
 from webapp.forms import LoginForm, RegistrationForm, CounryChoose
 from webapp.model import db, User, UserRequest
 
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
-login_manager.login_message = "Войдите, чтобы просмотреть страницу"
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
-
 @app.route("/")
 @login_required
 def display():
