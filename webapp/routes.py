@@ -69,6 +69,7 @@ def register():
 #     else:
 #         flash('пожалуйста, авторизуйтесь')
 #         return redirect(url_for('login'))
+@login_required
 def process_country():
     #создаем элемент формы
     form = CounryChoose()
@@ -89,6 +90,7 @@ def process_country():
         return redirect(url_for('display'))
 
 @app.route('/country_request')
+@login_required
 def country_request():
     title = f'Актуальная информация по странам'
     #ожидается проверка на current user, чтобы делать фильтр по нему
@@ -98,6 +100,7 @@ def country_request():
     return render_template('country_request.html', title=title, country_dep=dep, country_arr=arr)
 
 @app.route('/admin')
+@login_required
 def admin():
     # добавить проверку на роль Админ
     title = f'Админка'

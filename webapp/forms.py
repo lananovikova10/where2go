@@ -37,3 +37,4 @@ class CounryChoose(FlaskForm):
     country_arr = SelectField('Страна назначения', choices=country_name_list,\
                                   validators=[DataRequired()], render_kw={"class": "form-select form-select-lg mb-3"})                      
     submit = SubmitField('Поехали!', render_kw={"class":"btn btn-primary"})
+
