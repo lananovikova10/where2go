@@ -6,10 +6,10 @@ from webapp.config import Config
 
 db = SQLAlchemy()  # creating db instance
 app = Flask(__name__)
-migrate = Migrate()
+migrate = Migrate(compare_type=True)
 app.config.from_object(Config)
 
 db.init_app(app)  #  bounding app and bd
-migrate.init_app(app, db)  # bounfing app, bd and migration instance
+migrate.init_app(app, db)  # bounding app, bd and migration instance
 
 from webapp import routes, model

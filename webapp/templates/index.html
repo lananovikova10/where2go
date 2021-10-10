@@ -6,7 +6,9 @@
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
       <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+            
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
 
       <title>{{ page_title }}</title>
     </head>
@@ -16,22 +18,30 @@
         <div class="row">
           <div class="col-sm-9">
             Привет! Этот сайт поможет вам сориентироваться, куда можно, а куда нельзя. Или что-то в таком роде. Или в другом.
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <div class="alert alert-warning" role="alert">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
             <div class="row">
-              <div class="col-8 col-sm-6">
-                Страна вылета: 
-              </div>
-              <div class="col-4 col-sm-6">
-                Страна назначения:
+              <div class="col-6 col-sm-6">
+                <form action="{{ url_for('process_country') }}" method="POST">
+                  {{ form.hidden_tag() }}
+                  <h3>{{ form.country_dep.label }}:</h3>
+                    {{ form.country_dep() }}
+                  <h3>{{ form.country_arr.label }}:</h3>
+                    {{ form.country_arr() }}
+                  <p>
+                    {{ form.submit() }}
+                  </p>
+                </form>
               </div>
             </div>
           </div>
         </div>
-      <button type="button" class="btn btn-primary">Поехали</button>
-      </div>
-        <!-- Optional JavaScript -->
-        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
       </body>
   </html>
