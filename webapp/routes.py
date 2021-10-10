@@ -42,7 +42,6 @@ def process_country():
 
         db.session.add(choice)
         db.session.commit()
-        #flash(f'получилось, из {select_dep} в {select_arr}')
         return redirect(url_for('country_request'))
     else: 
         flash('одинаковые страны, попробуйте еще')

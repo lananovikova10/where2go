@@ -11,10 +11,9 @@ class LoginForm(FlaskForm):
 class CounryChoose(FlaskForm):
     country_name_list = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 'Ангола', 'Андорра', 'Антигуа и Барбуда']
     country_code_list = ['AU', 'AU2', 'AZZ', 'ALD', 'ALZ', 'ANG', 'ANO', 'AAB']
-    quant = len(country_name_list)
 
     country_dep = SelectField('Страна отправления', choices=country_name_list,\
-                                  validators=[DataRequired()], render_kw={"class": "form-control"})
+                                  validators=[DataRequired()], render_kw={"class": "form-select form-select-lg mb-3"})
     country_arr = SelectField('Страна назначения', choices=country_name_list,\
-                                  validators=[DataRequired()], render_kw={"class": "form-control"})                      
+                                  validators=[DataRequired()], render_kw={"class": "form-select form-select-lg mb-3"})                      
     submit = SubmitField('Поехали!', render_kw={"class":"btn btn-primary"})

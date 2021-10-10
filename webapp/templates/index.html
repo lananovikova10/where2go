@@ -33,20 +33,8 @@
                   {{ form.hidden_tag() }}
                   <h3>{{ form.country_dep.label }}:</h3>
                     {{ form.country_dep() }}
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                    <option selected>{{ form.country_dep.label }}</option>
-                    {% for i in form.country_dep.choices %}
-                      <option> {{ i }} </option>
-                    {% endfor %}
-                  </select>
                   <h3>{{ form.country_arr.label }}:</h3>
                     {{ form.country_arr() }}
-                  <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-                    <option selected>{{ form.country_arr.label }}</option>
-                    {% for i in form.country_arr.choices %}
-                      <option> {{ i }} </option>
-                    {% endfor %}
-                  </select>
                   <p>
                     {{ form.submit() }}
                   </p>
@@ -55,6 +43,5 @@
             </div>
           </div>
         </div>
-
       </body>
   </html>
