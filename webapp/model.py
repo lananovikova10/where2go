@@ -17,7 +17,7 @@ class Country(db.Model):
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String(64), index=True, unique=True)
+    login = db.Column(db.String(64), unique=True)
     email = db.Column(db.String(128), unique=True)
     password = db.Column(db.String(200))
 
