@@ -16,7 +16,7 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 @app.route("/")
-@login_required
+#@login_required
 def display():
     title = 'Куда поехать теперь?'
     country_choosed = CounryChoose()
@@ -36,7 +36,7 @@ def process_login():
         user = User.query.filter_by(login=form.username.data).first()
         if user and user.check_password(password=form.password.data):
             login_user(user)
-            flash('Вы вошли на сайт')
+            flash('Вы авторизированы')
             return redirect(url_for('display'))
     flash('Неправильное имя пользователя или пароль')
     return redirect(url_for('login'))
@@ -44,6 +44,7 @@ def process_login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Вы успешно разлогинились')
     return redirect(url_for('display'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -62,13 +63,12 @@ def register():
 
 
 @app.route('/process_country', methods=['GET', 'POST'])
-# подготовлен блок для проверки авторизации
-# def check_signin():
-#     #if not current_user.is_authenticated:
-#         return process_country()
-#     else:
-#         flash('пожалуйста, авторизуйтесь')
-#         return redirect(url_for('login'))
+def check_signin():
+    if current_user.is_authenticated:
+        return process_country()
+    else:
+        flash('пожалуйста, авторизируйтесь')
+        return redirect(url_for('login'))
 def process_country():
     #создаем элемент формы
     form = CounryChoose()
