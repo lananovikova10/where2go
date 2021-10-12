@@ -8,7 +8,6 @@ from webapp.forms import LoginForm, RegistrationForm, CounryChoose
 from webapp.model import db, User, UserRequest
 
 @app.route("/")
-@login_required
 def display():
     title = 'Куда поехать теперь?'
     country_choosed = CounryChoose()
@@ -28,7 +27,7 @@ def process_login():
         user = User.query.filter_by(login=form.username.data).first()
         if user and user.check_password(password=form.password.data):
             login_user(user)
-            flash('Вы вошли на сайт')
+            flash('Вы авторизированы')
             return redirect(url_for('display'))
     flash('Неправильное имя пользователя или пароль')
     return redirect(url_for('login'))
@@ -36,6 +35,7 @@ def process_login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Вы успешно разлогинились')
     return redirect(url_for('display'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -54,16 +54,13 @@ def register():
 
 
 @app.route('/process_country', methods=['GET', 'POST'])
-# подготовлен блок для проверки авторизации
-# def check_signin():
-#     #if not current_user.is_authenticated:
-#         return process_country()
-#     else:
-#         flash('пожалуйста, авторизуйтесь')
-#         return redirect(url_for('login'))
-@login_required
+def check_signin():
+    if current_user.is_authenticated:
+        return process_country()
+    else:
+        flash('пожалуйста, авторизируйтесь')
+        return redirect(url_for('login'))
 def process_country():
-    #создаем элемент формы
     form = CounryChoose()
     if form.validate_on_submit():
         form.country_dep
@@ -71,11 +68,9 @@ def process_country():
         select_arr = request.form.get('country_arr')
     if select_dep != select_arr:
         choice = UserRequest(user_id=current_user.id, country_dep = select_dep, country_arr = select_arr)
-        # если авторизирован - по проверке выше, брать user_id = current_user.id
 
         db.session.add(choice)
         db.session.commit()
-        #flash(f'получилось, из {select_dep} в {select_arr}')
         return redirect(url_for('country_request'))
     else: 
         flash('одинаковые страны, попробуйте еще')

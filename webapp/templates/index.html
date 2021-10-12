@@ -41,7 +41,7 @@
               {% endwith %}
               <div class="row">
                 <div class="col-6 col-sm-6">
-                  <form action="{{ url_for('process_country') }}" method="POST">
+                  <form action="{{ url_for('check_signin') }}" method="POST">
                     {{ form.hidden_tag() }}
                     <h3>{{ form.country_dep.label }}:</h3>
                       {{ form.country_dep() }}
