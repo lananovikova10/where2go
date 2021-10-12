@@ -36,7 +36,7 @@ class CounryChoose(FlaskForm):
         formatted_country_name_list = []
         for country in country_name_list:
             country = str(country)
-            country = country[2:][:-3]
+            country = country[2:][:-3].replace("\\xa0"," ")
             formatted_country_name_list.append(country)
             formatted_country_name_list.sort()
     
