@@ -2,7 +2,9 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 
-from webapp.model import User
+from webapp.model import User, Country
+from webapp.model import db
+from webapp import app
 
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()], render_kw={"class": "form-control"})
@@ -29,12 +31,18 @@ class RegistrationForm(FlaskForm):
  
     
 class CounryChoose(FlaskForm):
-    country_name_list = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 'Ангола', 'Андорра', 'Антигуа и Барбуда']
-    country_code_list = ['AU', 'AU2', 'AZZ', 'ALD', 'ALZ', 'ANG', 'ANO', 'AAB']
-
-    country_dep = SelectField('Страна отправления', choices=country_name_list,\
+    with app.app_context():
+        country_name_list = db.session.query(Country.country_name)
+        formatted_country_name_list = []
+        for country in country_name_list:
+            country = str(country)
+            country = country[2:][:-3]
+            formatted_country_name_list.append(country)
+            formatted_country_name_list.sort()
+    
+    country_dep = SelectField('Страна отправления', choices=["Россия"],\
                                   validators=[DataRequired()], render_kw={"class": "form-select form-select-lg mb-3"})
-    country_arr = SelectField('Страна назначения', choices=country_name_list,\
+    country_arr = SelectField('Страна назначения', choices=formatted_country_name_list,\
                                   validators=[DataRequired()], render_kw={"class": "form-select form-select-lg mb-3"})                      
     submit = SubmitField('Поехали!', render_kw={"class":"btn btn-primary"})
 

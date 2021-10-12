@@ -1,11 +1,12 @@
 import requests
 
-#from webapp import app
-from model import Country, db
-#from webapp import db
-from config import Config
+from webapp import app
+from webapp.model import Country, db
+from webapp import db
+from webapp.config import Config
 
 continents_list = ["Европа", "Азия", "Океания", "Африка", "Америка", "Антарктика"]
+
 
 def fetch_country_data():
     countries = {}
@@ -23,11 +24,8 @@ def fetch_country_data():
         countries.update(countries_fetch_result)
         for value in countries.values():
             list_of_countries.append(value)
-    return list_of_countries
+    return list_of_countries  
 
-#{'name': 'Южный Судан', 'fullname': '', 'english': 'South Sudan', 
-# 'id': 'SS', 'country_code3': 'SSD', 'iso': 728, 'telcod': 211, 'telcod_len': 0, 
-# 'location': 'Африка', 'capital': 16888, 'mcc': 0, 'lang': '', 'langcod': ''}    
 
 def parse_country_data():
     list_of_countries2 = fetch_country_data()
@@ -35,11 +33,11 @@ def parse_country_data():
         try:
             country_name = country_object.get('name')
             country_code = country_object.get('country_code3')
-            print(f'{country_name} и {country_code}')
+            save_countries(country_name=country_name, country_code=country_code)
         except(AttributeError):
-            print('Это не словарь')  
-    save_countries(country_name=country_name, country_code=country_code)     
- 
+            print('Это не словарь')       
+
+
 def save_countries(country_name, country_code):
     country_exists = Country.query.filter(Country.country_name == country_name).count()
     if not country_exists:
