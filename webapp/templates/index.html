@@ -14,32 +14,44 @@
     </head>
       <body>
         <div class="container">
+          <nav class="navbar navbar-light bg-light">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="#">Куда поехать</a>
+            <ul class="nav navbar-nav navbar-right">
+              {% if current_user.is_authenticated %}
+              <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+                {% else %}
+                <li><a href="{{ url_for('login') }}">Войти</a></li>
+                {% endif %}
+            </ul>
+          </div>
+          </nav>
         <h1>{{ page_title }}</h1>
-        <div class="row">
-          <div class="col-sm-9">
-            Привет! Этот сайт поможет вам сориентироваться, куда можно, а куда нельзя. Или что-то в таком роде. Или в другом.
-            {% with messages = get_flashed_messages() %}
-              {% if messages %}
-                <div class="alert alert-warning" role="alert">
-                    {% for message in messages %}
-                        {{ message }}<br>
-                    {% endfor %}
+          <div class="row">
+            <div class="col-sm-9">
+              Привет! Этот сайт поможет вам сориентироваться, куда можно, а куда нельзя. Или что-то в таком роде. Или в другом.
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  <div class="alert alert-warning" role="alert">
+                      {% for message in messages %}
+                          {{ message }}<br>
+                      {% endfor %}
+                  </div>
+                {% endif %}
+              {% endwith %}
+              <div class="row">
+                <div class="col-6 col-sm-6">
+                  <form action="{{ url_for('process_country') }}" method="POST">
+                    {{ form.hidden_tag() }}
+                    <h3>{{ form.country_dep.label }}:</h3>
+                      {{ form.country_dep() }}
+                    <h3>{{ form.country_arr.label }}:</h3>
+                      {{ form.country_arr() }}
+                    <p>
+                      {{ form.submit() }}
+                    </p>
+                  </form>
                 </div>
-              {% endif %}
-            {% endwith %}
-            <div class="row">
-              <div class="col-6 col-sm-6">
-                <form action="{{ url_for('process_country') }}" method="POST">
-                  {{ form.hidden_tag() }}
-                  <h3>{{ form.country_dep.label }}:</h3>
-                    {{ form.country_dep() }}
-                  <h3>{{ form.country_arr.label }}:</h3>
-                    {{ form.country_arr() }}
-                  <p>
-                    {{ form.submit() }}
-                  </p>
-                </form>
-              </div>
             </div>
           </div>
         </div>
