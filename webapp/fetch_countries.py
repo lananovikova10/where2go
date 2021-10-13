@@ -18,12 +18,15 @@ def fetch_country_data():
             "json": "",
             "api_key": Config.COUNTRY_API_KEY
         }
-        get_request_result = requests.get(country_api_url, params = params)
-        get_request_result.raise_for_status()
-        countries_fetch_result = get_request_result.json()
-        countries.update(countries_fetch_result)
-        for value in countries.values():
-            countries_data.append(value)
+        try:
+            get_request_result = requests.get(country_api_url, params = params)
+            get_request_result.raise_for_status()
+            countries_fetch_result = get_request_result.json()
+            countries.update(countries_fetch_result)
+            for value in countries.values():
+                countries_data.append(value)
+        except(requests.RequestException):
+            print('Ошибка сети')
     return countries_data 
 
 
@@ -35,7 +38,7 @@ def parse_country_data():
             country_code = country_object.get('country_code3')
             save_countries(country_name=country_name, country_code=country_code)
         except(AttributeError):
-            print('Это не словарь')       
+            print('Это не словарь')      
 
 
 def save_countries(country_name, country_code):
