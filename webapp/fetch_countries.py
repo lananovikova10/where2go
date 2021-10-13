@@ -5,12 +5,12 @@ from webapp.model import Country, db
 from webapp import db
 from webapp.config import Config
 
-continents_list = ["Европа", "Азия", "Океания", "Африка", "Америка", "Антарктика"]
+continents_list = ["Европа", "Азия", "Океания", "Африка", "Америка"]
 
 
 def fetch_country_data():
     countries = {}
-    list_of_countries = []
+    countries_data = []
     for continent in continents_list:
         country_api_url = Config.COUNTRY_API_URL
         params = {
@@ -23,13 +23,13 @@ def fetch_country_data():
         countries_fetch_result = get_request_result.json()
         countries.update(countries_fetch_result)
         for value in countries.values():
-            list_of_countries.append(value)
-    return list_of_countries  
+            countries_data.append(value)
+    return countries_data 
 
 
 def parse_country_data():
-    list_of_countries2 = fetch_country_data()
-    for country_object in list_of_countries2:
+    list_of_countries = fetch_country_data()
+    for country_object in list_of_countries:
         try:
             country_name = country_object.get('name')
             country_code = country_object.get('country_code3')
