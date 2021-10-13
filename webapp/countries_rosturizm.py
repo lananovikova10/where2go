@@ -1,11 +1,9 @@
-import requests, pprint, string
+import requests, string
 from bs4 import BeautifulSoup
 
-# получить страну с формы. Например, из БД по последнему запросу от этого пользователя
-country_arr = 'Грузия'
 
 def get_info_rosturizm(country_arr):
-    url = "https://city.russia.travel/safety/kakie_strany_otkryty/"
+    url = "https://city.russia.travel/safety/kakie_strany_otkryty/d"
     html = get_html(url)
     if html:
         data = parse_conditions_rosturizm(html, country_arr)
@@ -20,7 +18,7 @@ def get_html(url):
         result.raise_for_status()
         return result.text
     except(requests.RequestException, ValueError):
-        return False
+        return None
 
 
 def parse_conditions_rosturizm(html, country_arr):
@@ -30,7 +28,7 @@ def parse_conditions_rosturizm(html, country_arr):
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
             return get_conditions(info_block)
-    return 'Страна закрыта для туристов'
+    return {}
 
 
 def get_conditions(info_block):
@@ -38,15 +36,13 @@ def get_conditions(info_block):
     conditions_info = info_block.findAll('strong')
     for i in conditions_info:
         if i.text == 'Транспортное сообщение':
-            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0]
+            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
         elif i.text == 'Прямое авиасообщение':
-            country_conditions['transportation'] = i.text
+            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         country_conditions['visa'] = info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
         country_conditions['conditions'] = info_block.text.split('Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
         country_conditions['vaccine'] = info_block.text.split('Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()
         country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
         country_conditions['restrictions '] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
     return country_conditions
-
-#убрать, если настроен вывод на шаблон
-pprint.pprint(get_info_rosturizm(country_arr))
+    
