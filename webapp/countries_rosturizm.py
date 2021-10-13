@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 def get_info_rosturizm(country_arr):
-    url = "https://city.russia.travel/safety/kakie_strany_otkryty/d"
+    url = "https://city.russia.travel/safety/kakie_strany_otkryty/"
     html = get_html(url)
     if html:
         data = parse_conditions_rosturizm(html, country_arr)
