@@ -5,6 +5,7 @@ from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
 from webapp.model import User, Country
 from webapp.model import db
 from webapp import app
+from webapp import log 
 
 class LoginForm(FlaskForm):
     username = StringField('Логин', validators=[DataRequired()], render_kw={"class": "form-control"})
