@@ -10,6 +10,8 @@ def get_info_rosturizm(country_arr):
         return data
     else: 
         return None
+
+
 def get_html(url):
     try:
         result = requests.get(url)
@@ -17,6 +19,8 @@ def get_html(url):
         return result.text
     except(requests.RequestException, ValueError):
         return None
+
+
 def parse_conditions_rosturizm(html, country_arr):
     soup = BeautifulSoup(html, 'html.parser')
     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
@@ -25,6 +29,8 @@ def parse_conditions_rosturizm(html, country_arr):
             info_block = item.find_next('div', class_='t-text t-text_md')
             return get_conditions(info_block)
     return {}
+
+    
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
