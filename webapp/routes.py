@@ -80,7 +80,6 @@ def process_country():
 @login_required
 def country_request():
     title = f'Актуальная информация по странам'
-    #ожидается проверка на current user, чтобы делать фильтр по нему
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
@@ -89,10 +88,10 @@ def country_request():
 @app.route('/admin')
 @login_required
 def admin():
-    # добавить проверку на роль Админ
-    title = f'Админка'
-    users = User.query.all()
-    for user in users:
-        print(f'id {user.id}, login {user.login}')
-
-    return render_template('admin.html', title=title, users = users)
+    if current_user.admin:
+        title = f'Админка'
+        users = User.query.filter().order_by(User.id)
+        return render_template('admin.html', title=title, users = users)
+    else:
+        flash('Вы не админ')
+        return redirect(url_for('display'))
