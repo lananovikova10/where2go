@@ -18,7 +18,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('display'))
     form = LoginForm()
-    return render_template('login.html', title='Sign In', form=form)
+    return render_template('login.html', page_title='Страница логина', form=form)
 
 @app.route('/process-login', methods=['POST'])
 def process_login():
@@ -50,7 +50,7 @@ def register():
         db.session.commit()
         flash('Поздравляем, вы зарегистрировались!')
         return redirect(url_for('login'))
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', page_title='Страница регистрации', form=form)
 
 
 @app.route('/process_country', methods=['GET', 'POST'])
@@ -83,7 +83,7 @@ def country_request():
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
-    return render_template('country_request.html', title=title, country_dep=dep, country_arr=arr)
+    return render_template('country_request.html', page_title=title, country_dep=dep, country_arr=arr)
 
 @app.route('/admin')
 @login_required
@@ -91,7 +91,7 @@ def admin():
     if current_user.admin:
         title = f'Админка'
         users = User.query.filter().order_by(User.id)
-        return render_template('admin.html', title=title, users = users)
+        return render_template('admin.html', page_title=title, users = users)
     else:
         flash('Вы не админ')
         return redirect(url_for('display'))
