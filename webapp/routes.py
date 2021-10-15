@@ -3,7 +3,7 @@ from flask_admin.base import AdminIndexView
 
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
-from webapp import app
+from webapp import app, admin
 
 from webapp.forms import LoginForm, RegistrationForm, CounryChoose
 from webapp.model import db, User, UserRequest, Country
@@ -87,31 +87,20 @@ def country_request():
     arr = que[0].country_arr
     return render_template('country_request.html', title=title, country_dep=dep, country_arr=arr)
 
-# @app.route('/admin')
-# @login_required
-# def admin():
-#     if current_user.admin:
-#         title = f'Админка'
-#         users = User.query.filter().order_by(User.id)
-#         return render_template('admin.html', title=title, users = users)
-#     else:
+
+# class AdminView(AdminIndexView):
+
+#     def is_accessible(self):
+#         return current_user.is_authenticated and current_user.is_admin
+
+#     def inaccessible_callback(self, name, **kwargs):
 #         flash('Вы не админ')
-#         return redirect(url_for('display'))
+#         return redirect(url_for('display', next=request.url))
 
-class AdminView(AdminIndexView):
 
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.is_admin
+class UserAdmin(ModelView):
+    column_exclude_list = ['password']
 
-    def inaccessible_callback(self, name, **kwargs):
-        flash('Вы не админ')
-        return redirect(url_for('display', next=request.url))
-
-# from webapp import admin
-
-# class UserAdmin(ModelView):
-#     column_exclude_list = ['password']
-
-# admin.add_view(ModelView(Country, db.session))
-# admin.add_view(UserAdmin(User, db.session))
-# admin.add_view(ModelView(UserRequest, db.session))
+admin.add_view(ModelView(Country, db.session))
+admin.add_view(UserAdmin(User, db.session))
+admin.add_view(ModelView(UserRequest, db.session))
