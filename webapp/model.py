@@ -3,9 +3,8 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
-from flask_admin.contrib.sqla import ModelView
 
-from webapp import db, app, admin
+from webapp import db, app
 class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
@@ -49,9 +48,3 @@ class UserRequest(db.Model):
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'
 
-class UserAdmin(ModelView):
-    column_exclude_list = ['password']
-
-admin.add_view(ModelView(Country, db.session))
-admin.add_view(UserAdmin(User, db.session))
-admin.add_view(ModelView(UserRequest, db.session))
