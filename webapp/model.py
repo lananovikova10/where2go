@@ -35,6 +35,9 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def __repr__(self):
+        return f'User {self.id} {self.login}'
+
 
 class UserRequest(db.Model):
     __tablename__ = 'users_requests'
@@ -46,10 +49,9 @@ class UserRequest(db.Model):
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'
 
-
-class UserRequestView(ModelView):
-    form_columns = ['country_dep', 'country_arr', 'user_id']
+class UserAdmin(ModelView):
+    column_exclude_list = ['password']
 
 admin.add_view(ModelView(Country, db.session))
-admin.add_view(ModelView(User, db.session))
-admin.add_view(UserRequestView(UserRequest, db.session))
+admin.add_view(UserAdmin(User, db.session))
+admin.add_view(ModelView(UserRequest, db.session))

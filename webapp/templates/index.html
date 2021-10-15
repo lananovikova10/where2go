@@ -16,13 +16,18 @@
         <div class="container">
           <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-            <a class="navbar-brand" href="#">Куда поехать</a>
+            <a class="navbar-brand" href="/">Куда поехать</a>
             <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}
               <li><a href="{{ url_for('logout') }}">Выйти</a></li>
                 {% else %}
                 <li><a href="{{ url_for('login') }}">Войти</a></li>
                 {% endif %}
+              <li>
+                <br>
+                <br>
+                <a href="{{ url_for('admin') }}">Админка</a>
+              </li>
             </ul>
           </div>
           </nav>

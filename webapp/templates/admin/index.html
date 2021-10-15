@@ -1,0 +1,22 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+    <ul class="nav navbar-nav navbar-right"></ul>
+      <li><a class="nav navbar-nav navbar-right" href="{{ url_for('display') }}">Главная страница</a></li>
+    
+      {% if current_user.is_authenticated %}
+      <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+        {% else %}
+      <li><a href="{{ url_for('login') }}">Войти</a></li>
+     {% endif %}
+    </ul>
+  </div>
+  </nav>
+
+  <p>Это админка сайта. <br>
+    Можно добавить, посмотреть, изменить, удалить данные из базы данных. <br>
+    Названия вкладок = названия таблиц в БД
+</p>
+{% endblock %}
