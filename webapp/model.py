@@ -3,8 +3,9 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey
+from flask_admin.contrib.sqla import ModelView
 
-from webapp import db, app
+from webapp import db, app, admin
 class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
@@ -14,6 +15,7 @@ class Country(db.Model):
     def __repr__(self):
         return f'<Country {self.country_code} {self.country_name}>'
 
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -21,6 +23,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(128), unique=True)
     password = db.Column(db.String(200))
     admin = db.Column(db.Boolean)
+    user_requests = db.relationship('UserRequest', backref='User', lazy='dynamic')
 
     @property
     def is_admin(self):
@@ -32,6 +35,7 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+
 class UserRequest(db.Model):
     __tablename__ = 'users_requests'
     id = db.Column(db.Integer, primary_key=True)
@@ -41,3 +45,11 @@ class UserRequest(db.Model):
 
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'
+
+
+class UserRequestView(ModelView):
+    form_columns = ['country_dep', 'country_arr', 'user_id']
+
+admin.add_view(ModelView(Country, db.session))
+admin.add_view(ModelView(User, db.session))
+admin.add_view(UserRequestView(UserRequest, db.session))
