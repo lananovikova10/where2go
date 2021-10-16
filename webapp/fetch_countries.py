@@ -26,7 +26,6 @@ def fetch_country_data():
         except(requests.RequestException):
             log.logging.warning('Ошибка сети')
         countries_fetch_result = json.loads(unicodedata.normalize('NFKD', request_result.text))
-        countries_fetch_result.update(countries_fetch_result)
         for value in countries_fetch_result.values():
             countries_data.append(value)
     return countries_data 
