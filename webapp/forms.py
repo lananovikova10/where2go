@@ -14,7 +14,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Электронная почта', validators=[DataRequired(), Email()], render_kw={"class": "form-control"})
     password = PasswordField('Пароль', validators=[DataRequired()], render_kw={"class": "form-control"})
     password2 = PasswordField(
-        'Повторите пароль', validators=[DataRequired(), EqualTo('password')], render_kw={"class": "form-control"})
+        'Повторите пароль', validators=[DataRequired(), EqualTo('password', message='Пароли не совпадают')], render_kw={"class": "form-control"})
     submit = SubmitField('Зарегистрироваться',render_kw={"class":"btn btn-primary"})
 
     def validate_username(self, login):
@@ -26,8 +26,7 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Введите другой адрес почты.')
- 
-    
+
 class CounryChoose(FlaskForm):
     country_name_list = ['Австралия', 'Австрия', 'Азербайджан', 'Албания', 'Алжир', 'Ангола', 'Андорра', 'Антигуа и Барбуда']
     country_code_list = ['AU', 'AU2', 'AZZ', 'ALD', 'ALZ', 'ANG', 'ANO', 'AAB']
