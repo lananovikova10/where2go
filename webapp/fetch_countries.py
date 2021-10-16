@@ -1,5 +1,6 @@
 import requests
-
+import json
+import unicodedata
 
 from webapp import log
 from webapp import app
@@ -23,8 +24,8 @@ def fetch_country_data():
             request_result = requests.get(country_api_url, params = params)
             request_result.raise_for_status()
         except(requests.RequestException):
-            log.logging.warning('Ошибка сети') 
-        countries_fetch_result = request_result.json()
+            log.logging.warning('Ошибка сети')
+        countries_fetch_result = json.loads(unicodedata.normalize('NFKD', request_result.text))
         countries_fetch_result.update(countries_fetch_result)
         for value in countries_fetch_result.values():
             countries_data.append(value)
@@ -34,9 +35,13 @@ def fetch_country_data():
 def parse_country_data():
     list_of_countries = fetch_country_data()
     for country_object in list_of_countries:
-        try:
-            country_name = country_object.get('name')
+        try: 
             country_code = country_object.get('country_code3')
+            country_name = country_object.get('name')
+            if country_name == "Македония":
+                country_name = "Северная Македония"
+            elif country_name == "Свазиленд":
+                country_name = "Эсватини"
             log.logging.info(country_name)
             save_countries(country_name=country_name, country_code=country_code)
         except(AttributeError):
