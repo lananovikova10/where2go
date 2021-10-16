@@ -28,16 +28,12 @@ def load_user(user_id):
 from flask_login import current_user
 from flask import redirect, flash, url_for, request
 
-class AdminView(AdminIndexView):
 
-    def is_accessible(self):
-        return current_user.is_authenticated and current_user.is_admin
-
-    def inaccessible_callback(self, name, **kwargs):
-        flash('Вы не админ')
-        return redirect(url_for('display', next=request.url))
-
-admin = Admin(app, index_view=AdminView())
 
 from webapp import routes, model
-from webapp.model import db, User
+from webapp.model import db, User, UserRequest, Country
+
+admin = Admin(app, index_view=routes.AdminView())
+admin.add_view(routes.ModelView(Country, db.session))
+admin.add_view(routes.ModelView(User, db.session))
+admin.add_view(routes.ModelView(UserRequest, db.session))

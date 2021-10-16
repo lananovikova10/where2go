@@ -3,7 +3,7 @@ from flask_admin.base import AdminIndexView
 
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 
-from webapp import app, admin
+from webapp import app
 
 from webapp.forms import LoginForm, RegistrationForm, CounryChoose
 from webapp.model import db, User, UserRequest, Country
@@ -97,10 +97,15 @@ def country_request():
 #         flash('Вы не админ')
 #         return redirect(url_for('display', next=request.url))
 
+class AdminView(AdminIndexView):
 
-class UserAdmin(ModelView):
-    column_exclude_list = ['password']
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.is_admin
 
-admin.add_view(ModelView(Country, db.session))
-admin.add_view(UserAdmin(User, db.session))
-admin.add_view(ModelView(UserRequest, db.session))
+    def inaccessible_callback(self, name, **kwargs):
+        flash('Вы не админ')
+        return redirect(url_for('display', next=request.url))
+
+
+
+
