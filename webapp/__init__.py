@@ -35,5 +35,6 @@ from webapp.model import db, User, UserRequest, Country
 
 admin = Admin(app, index_view=routes.AdminView())
 admin.add_view(routes.ModelView(Country, db.session))
-admin.add_view(routes.ModelView(User, db.session))
-admin.add_view(routes.ModelView(UserRequest, db.session))
+admin.add_view(routes.UserAdmin(User, db.session))
+admin.add_view(routes.UserRequestAdmin(UserRequest, db.session))
+
