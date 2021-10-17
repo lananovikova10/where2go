@@ -88,15 +88,6 @@ def country_request():
     return render_template('country_request.html', title=title, country_dep=dep, country_arr=arr)
 
 
-# class AdminView(AdminIndexView):
-
-#     def is_accessible(self):
-#         return current_user.is_authenticated and current_user.is_admin
-
-#     def inaccessible_callback(self, name, **kwargs):
-#         flash('Вы не админ')
-#         return redirect(url_for('display', next=request.url))
-
 class AdminView(AdminIndexView):
 
     def is_accessible(self):

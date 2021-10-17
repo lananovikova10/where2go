@@ -24,9 +24,11 @@
                 <li><a href="{{ url_for('login') }}">Войти</a></li>
                 {% endif %}
               <li>
+                {% if current_user.is_admin %}
                 <br>
                 <br>
                 <a href="admin">Админка</a>
+                {% endif %}
               </li>
             </ul>
           </div>
