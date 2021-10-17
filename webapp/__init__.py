@@ -24,10 +24,8 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 
-
 from flask_login import current_user
 from flask import redirect, flash, url_for, request
-
 
 
 from webapp import routes, model
@@ -37,4 +35,3 @@ admin = Admin(app, index_view=routes.AdminView())
 admin.add_view(routes.ModelView(Country, db.session))
 admin.add_view(routes.UserAdmin(User, db.session))
 admin.add_view(routes.UserRequestAdmin(UserRequest, db.session))
-
