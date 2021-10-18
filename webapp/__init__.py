@@ -11,10 +11,11 @@ app = Flask(__name__)
 migrate = Migrate(compare_type=True)
 app.config.from_object(Config)
 
-from webapp.user.views import blueprint as user_blueprint
-
 db.init_app(app)  #  bounding app and bd
 migrate.init_app(app, db)  # bounding app, bd and migration instance
+
+from webapp.user.views import blueprint as user_blueprint
+from webapp.country.views import blueprint as country_blueprint
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -26,13 +27,15 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 app.register_blueprint(user_blueprint)
+app.register_blueprint(country_blueprint)
+
 
 from flask_login import current_user
 from flask import redirect, flash, url_for, request
 
 
 from webapp import routes, model
-from webapp.model import UserRequest, Country
+from webapp.country.models import UserRequest, Country
 from webapp.user.models import User 
 
 admin = Admin(app, index_view=routes.AdminView())

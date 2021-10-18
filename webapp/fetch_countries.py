@@ -4,7 +4,7 @@ import unicodedata
 
 from webapp import log
 from webapp import app
-from webapp.model import Country, db
+from webapp.country.models import Country
 from webapp import db
 from webapp.config import Config
 

@@ -7,9 +7,9 @@
       <li><a class="nav navbar-nav navbar-right" href="{{ url_for('display') }}">Главная страница</a></li>
     
       {% if current_user.is_authenticated %}
-      <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+      <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>
         {% else %}
-      <li><a href="{{ url_for('login') }}">Войти</a></li>
+      <li><a href="{{ url_for('user_related.login') }}">Войти</a></li>
      {% endif %}
     </ul>
   </div>
