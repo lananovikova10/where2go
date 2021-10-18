@@ -11,7 +11,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('main_page.display'))
     form = LoginForm()
-    return render_template('login.html', page_title='Страница логина', form=form)
+    return render_template('user/login.html', page_title='Страница логина', form=form)
 
 @blueprint.route('/process-login', methods=['POST'])
 def process_login():
@@ -43,7 +43,7 @@ def register():
         db.session.commit()
         flash('Поздравляем, вы зарегистрировались!')
         return redirect(url_for('user_related.login'))
-    return render_template('register.html', page_title='Страница регистрации', form=form)
+    return render_template('user/register.html', page_title='Страница регистрации', form=form)
 
 
 from webapp.user.forms import LoginForm, RegistrationForm

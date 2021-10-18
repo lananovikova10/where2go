@@ -41,4 +41,4 @@ def country_request():
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
-    return render_template('country_request.html', page_title=title, country_dep=dep, country_arr=arr)
+    return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr)
