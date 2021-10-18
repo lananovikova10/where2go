@@ -21,8 +21,15 @@
               {% if current_user.is_authenticated %}
               <li><a href="{{ url_for('logout') }}">Выйти</a></li>
                 {% else %}
-                <li><a href="{{ url_for('login') }}">Войти</a></li>
+              <li><a href="{{ url_for('login') }}">Войти</a></li>
                 {% endif %}
+              <li>
+                {% if current_user.is_admin %}
+                <br>
+                <br>
+                <a href="admin">Админка</a>
+                {% endif %}
+              </li>
             </ul>
           </div>
           </nav>

@@ -15,6 +15,7 @@ class Country(db.Model):
     def __repr__(self):
         return f'<Country {self.country_code} {self.country_name}>'
 
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -22,6 +23,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(128), unique=True)
     password = db.Column(db.String(200))
     admin = db.Column(db.Boolean)
+    user_requests = db.relationship('UserRequest', backref='User', lazy='dynamic')
 
     @property
     def is_admin(self):
@@ -33,6 +35,10 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    def __repr__(self):
+        return f'User {self.id} {self.login}'
+
+
 class UserRequest(db.Model):
     __tablename__ = 'users_requests'
     id = db.Column(db.Integer, primary_key=True)
@@ -42,3 +48,4 @@ class UserRequest(db.Model):
 
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'
+
