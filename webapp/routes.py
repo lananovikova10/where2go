@@ -10,11 +10,13 @@ from webapp.model import db, User, UserRequest, Country
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired
 
+
 @app.route("/")
 def display():
     title = 'Куда поехать теперь?'
     country_choosed = CounryChoose()
-    return render_template('index.html', page_title = title, form = country_choosed)
+    return render_template('index.html', page_title=title, form=country_choosed)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -22,6 +24,7 @@ def login():
         return redirect(url_for('display'))
     form = LoginForm()
     return render_template('login.html', page_title='Страница логина', form=form)
+
 
 @app.route('/process-login', methods=['POST'])
 def process_login():
@@ -35,11 +38,13 @@ def process_login():
     flash('Неправильное имя пользователя или пароль')
     return redirect(url_for('login'))
 
+
 @app.route('/logout')
 def logout():
     logout_user()
     flash('Вы успешно разлогинились')
     return redirect(url_for('display'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -63,6 +68,8 @@ def check_signin():
     else:
         flash('пожалуйста, авторизируйтесь')
         return redirect(url_for('login'))
+
+
 def process_country():
     form = CounryChoose()
     if form.validate_on_submit():
@@ -70,23 +77,25 @@ def process_country():
         select_dep = request.form.get('country_dep')
         select_arr = request.form.get('country_arr')
     if select_dep != select_arr:
-        choice = UserRequest(user_id=current_user.id, country_dep = select_dep, country_arr = select_arr)
+        choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
 
         db.session.add(choice)
         db.session.commit()
         return redirect(url_for('country_request'))
-    else: 
+    else:
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('display'))
+
 
 @app.route('/country_request')
 @login_required
 def country_request():
     title = f'Актуальная информация по странам'
-    que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
+    que = UserRequest.query.filter(UserRequest.user_id == current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
-    return render_template('country_request.html', page_title=title, country_dep=dep, country_arr=arr)
+    return render_template('country_request.html', page_title=title,
+                           country_dep=dep, country_arr=arr)
 
 
 # делает страницу админки доступной только для админов
@@ -99,13 +108,14 @@ class AdminView(AdminIndexView):
         flash('Вы не админ')
         return redirect(url_for('display', next=request.url))
 
+
 # настройки для отображения таблицы в админке
 class UserAdmin(ModelView):
     # хеширует пароль при создании юзера
     def on_model_change(self, form, User, is_created):
         if form.password.data:
             User.set_password(form.password.data)
-    
+
     # проверка при создании
     form_args = {
         'login': {'validators': [DataRequired()]},
@@ -113,11 +123,12 @@ class UserAdmin(ModelView):
         'password': {'validators': [DataRequired()]}
         }
     # скрывает поле user_requests на форме
-    form_excluded_columns = ['user_requests',]
+    form_excluded_columns = ['user_requests', ]
     # добавляет поиск по email
-    column_searchable_list = ['email',]
+    column_searchable_list = ['email', ]
     # добавляет фильтр по admin
     column_filters = ['admin']
+
 
 class UserRequestAdmin(ModelView):
     form_args = {
@@ -125,4 +136,15 @@ class UserRequestAdmin(ModelView):
         'country_dep': {'validators': [DataRequired()]},
         'User': {'validators': [DataRequired()]},
         }
-    column_filters = ['user_id',]
+    column_filters = ['user_id', ]
+
+
+class CountryAdmin(ModelView):
+    form_args = {
+        'country_code': {'validators': [DataRequired()]},
+        'country_name': {'validators': [DataRequired()]},
+        }
+    column_searchable_list = ['country_name', ]
+    can_delete = False
+    can_edit = False
+    can_create = False
