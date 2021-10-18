@@ -4,7 +4,7 @@
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
     <ul class="nav navbar-nav navbar-right"></ul>
-      <li><a class="nav navbar-nav navbar-right" href="{{ url_for('display') }}">Главная страница</a></li>
+      <li><a class="nav navbar-nav navbar-right" href="{{ url_for('main_page.display') }}">Главная страница</a></li>
     
       {% if current_user.is_authenticated %}
       <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>

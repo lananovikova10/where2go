@@ -1,9 +1,11 @@
-from flask import render_template
+from flask import render_template, Blueprint, current_app
 
 from webapp import app
 from webapp.country.forms import CounryChoose
 
-@app.route("/")
+blueprint = Blueprint('main_page', __name__)
+
+@blueprint.route("/")
 def display():
     title = 'Куда поехать теперь?'
     country_choosed = CounryChoose()
