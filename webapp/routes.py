@@ -5,8 +5,8 @@ from flask_login import LoginManager, login_user, logout_user, current_user, log
 
 from webapp import app
 
-from webapp.forms import LoginForm, RegistrationForm, CounryChoose
-from webapp.model import db, User, UserRequest, Country
+from webapp.forms import CounryChoose
+from webapp.model import db, UserRequest, Country
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired
 
@@ -16,53 +16,14 @@ def display():
     country_choosed = CounryChoose()
     return render_template('index.html', page_title = title, form = country_choosed)
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('display'))
-    form = LoginForm()
-    return render_template('login.html', page_title='Страница логина', form=form)
-
-@app.route('/process-login', methods=['POST'])
-def process_login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(login=form.username.data).first()
-        if user and user.check_password(password=form.password.data):
-            login_user(user)
-            flash('Вы авторизированы')
-            return redirect(url_for('display'))
-    flash('Неправильное имя пользователя или пароль')
-    return redirect(url_for('login'))
-
-@app.route('/logout')
-def logout():
-    logout_user()
-    flash('Вы успешно разлогинились')
-    return redirect(url_for('display'))
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('display'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        user = User(login=form.username.data, email=form.email.data)
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Поздравляем, вы зарегистрировались!')
-        return redirect(url_for('login'))
-    return render_template('register.html', page_title='Страница регистрации', form=form)
-
-
 @app.route('/process_country', methods=['GET', 'POST'])
 def check_signin():
     if current_user.is_authenticated:
         return process_country()
     else:
         flash('пожалуйста, авторизируйтесь')
-        return redirect(url_for('login'))
+        return redirect(url_for('user_related.login'))
+
 def process_country():
     form = CounryChoose()
     if form.validate_on_submit():

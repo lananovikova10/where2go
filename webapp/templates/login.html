@@ -5,7 +5,7 @@
          <div class="row">
             <div class="col-8">
                {% include "messages.html" %}
-               <form action="{{ url_for('process_login') }}" method="post">
+               <form action="{{ url_for('user_related.process_login') }}" method="post">
                     {{ form.hidden_tag() }}
                     <div class="form-group">
                        {{ form.username.label }}
@@ -24,7 +24,7 @@
          </div>
       <div class="row">
          <div class="col-8">
-            Ещё не зарегистрированы? <a href="{{ url_for('register') }}"> Зарегистрируйтесь!</a>
+            Ещё не зарегистрированы? <a href="{{ url_for('user_related.register') }}"> Зарегистрируйтесь!</a>
          </div>
       </div>
 {% endblock %}

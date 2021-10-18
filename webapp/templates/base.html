@@ -19,9 +19,9 @@
             <a class="navbar-brand" href="#">Куда поехать</a>
             <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}
-              <li><a href="{{ url_for('logout') }}">Выйти</a></li>
+              <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>
                 {% else %}
-              <li><a href="{{ url_for('login') }}">Войти</a></li>
+              <li><a href="{{ url_for('user_related.login') }}">Войти</a></li>
                 {% endif %}
               <li>
                 {% if current_user.is_admin %}
