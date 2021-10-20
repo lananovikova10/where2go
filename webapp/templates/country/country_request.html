@@ -18,9 +18,19 @@
                     <div class="col-sm-9">
                         <h2>
                     Отправление из: {{ country_dep }} <br><br>
-                    Прибытие в: {{ country_arr }}
+                    Прибытие в: {{ country_arr }} <br><br>
                         </h2>
-                    </p>
+                    {% if no_data_by_country %}
+                        <p>{{ no_data_by_country }}</p>
+                    {% else %}
+                        <p><b>Как добраться:</b> {{ transportation }}</p>
+                        <p><b>Нужна ли виза:</b> {{ visa }}</p>
+                        <p><b>Нужно для въезда:</b> {{ conditions }}</p>
+                        <p><b>Какие вакцины признаются:</b> {{ vaccine }}</p>
+                        <p><b>Что открыто:</b> {{ open_objects }}</p>
+                        <p><b>Ограничения:</b> {{ lockdown_restrictions }}</p>
+                        </p>
+                    {% endif %}
                     <h3><a href="{{ url_for('main_page.display') }}">на главную</a></h3>
                 </div>
             </div>
