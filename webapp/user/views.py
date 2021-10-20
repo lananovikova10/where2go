@@ -9,12 +9,14 @@ from webapp.user.forms import LoginForm, RegistrationForm, User
 
 blueprint = Blueprint('user_related', __name__, url_prefix='/users')
 
+
 @blueprint.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('main_page.display'))
     form = LoginForm()
     return render_template('user/login.html', page_title='Страница логина', form=form)
+
 
 @blueprint.route('/process-login', methods=['POST'])
 def process_login():
@@ -28,11 +30,13 @@ def process_login():
     flash('Неправильное имя пользователя или пароль')
     return redirect(url_for('user_related.login'))
 
+
 @blueprint.route('/logout')
 def logout():
     logout_user()
     flash('Вы успешно разлогинились')
     return redirect(url_for('main_page.display'))
+
 
 @blueprint.route('/register', methods=['GET', 'POST'])
 def register():

@@ -5,7 +5,7 @@ from flask_login import LoginManager
 from flask_admin import Admin
 
 from webapp.config import Config
-from webapp.admin.views import AdminView, ModelView, UserAdmin, UserRequestAdmin
+from webapp.admin.views import AdminView, ModelView, UserAdmin, UserRequestAdmin, CountryAdmin
 
 
 db = SQLAlchemy()  # creating db instance
@@ -37,6 +37,6 @@ app.register_blueprint(main_blueprint)
 app.register_blueprint(user_blueprint)
 
 admin = Admin(app, index_view=AdminView())
-admin.add_view(ModelView(Country, db.session))
+admin.add_view(CountryAdmin(Country, db.session))
 admin.add_view(UserAdmin(User, db.session))
 admin.add_view(UserRequestAdmin(UserRequest, db.session))

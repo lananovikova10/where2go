@@ -17,6 +17,7 @@ class AdminView(AdminIndexView):
         flash('Вы не админ')
         return redirect(url_for('display', next=request.url))
 
+
 # настройки для отображения таблицы в админке
 class UserAdmin(ModelView):
     # хеширует пароль при создании юзера
@@ -36,13 +37,15 @@ class UserAdmin(ModelView):
     # добавляет фильтр по admin
     column_filters = ['admin']
 
+
 class UserRequestAdmin(ModelView):
     form_args = {
         'country_arr': {'validators': [DataRequired()]},
         'country_dep': {'validators': [DataRequired()]},
         'User': {'validators': [DataRequired()]},
         }
-    column_filters = ['user_id',]
+    column_filters = ['user_id', ]
+
 
 class CountryAdmin(ModelView):
     form_args = {
