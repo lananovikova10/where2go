@@ -17,10 +17,26 @@
                     <p>
                     <div class="col-sm-9">
                         <h2>
-                    Отправление из: {{ country_dep }} <br><br>
-                    Прибытие в: {{ country_arr }}
+                            Отправления отправления: {{ country_dep }} <br>
+                            Страна прибытия: {{ country_arr }}
                         </h2>
                     </p>
+                    {% if covid_data%}
+                        <h4>
+                            <br>
+                            <p>Население: {{ covid_data['population'] }} человек</p>
+                            <p>Зарегистрированных случаев COVID-19: {{ covid_data['confirmed'] }}</p>
+                            <p>Летальных исходов: {{ covid_data['deaths'] }}</p>
+                            <p>Индекс здоровья: {{ covid_data['health index'] }}% *</p> <br>
+                        </h4>
+                        *% незаболевшего населения 
+                    {% else %}
+                        <h5>
+                            <br>
+                            <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
+                        </h5>
+                    {% endif %}
+                    
                     <h3><a href="{{ url_for('main_page.display') }}">на главную</a></h3>
                 </div>
             </div>
