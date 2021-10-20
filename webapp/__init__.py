@@ -21,9 +21,9 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 login_manager.login_message = "Войдите, чтобы просмотреть страницу"
+
+
 @login_manager.user_loader
-
-
 def load_user(user_id):
     return User.query.get(user_id)
 
@@ -36,6 +36,6 @@ from webapp import routes, model
 from webapp.model import db, User, UserRequest, Country
 
 admin = Admin(app, index_view=routes.AdminView())
-admin.add_view(routes.ModelView(Country, db.session))
+admin.add_view(routes.CountryAdmin(Country, db.session))
 admin.add_view(routes.UserAdmin(User, db.session))
 admin.add_view(routes.UserRequestAdmin(UserRequest, db.session))

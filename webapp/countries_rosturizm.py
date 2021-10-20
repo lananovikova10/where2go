@@ -1,4 +1,5 @@
-import requests, string
+import requests
+import string
 from bs4 import BeautifulSoup
 
 
@@ -8,7 +9,7 @@ def get_info_rosturizm(country_arr):
     if html:
         data = parse_conditions_rosturizm(html, country_arr)
         return data
-    else: 
+    else:
         return None
 
 
@@ -23,22 +24,25 @@ def get_html(url):
 
 def parse_conditions_rosturizm(html, country_arr):
     soup = BeautifulSoup(html, 'html.parser')
-    all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
+    all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md',
+                                         field="title")
     for item in all_published_country:
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
             return get_conditions(info_block)
     return {}
 
-    
+
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
     for i in conditions_info:
         if i.text == 'Транспортное сообщение':
-            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
+            country_conditions['transportation'] = \
+                info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
         elif i.text == 'Прямое авиасообщение':
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
+            country_conditions['transportation'] = \
+                i.text.strip(string.punctuation).strip()
         country_conditions['visa'] = info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
         country_conditions['conditions'] = info_block.text.split('Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
         country_conditions['vaccine'] = info_block.text.split('Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()

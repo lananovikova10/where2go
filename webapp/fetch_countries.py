@@ -21,14 +21,15 @@ def fetch_country_data():
             "api_key": Config.COUNTRY_API_KEY
         }
         try:
-            request_result = requests.get(country_api_url, params = params)
+            request_result = requests.get(country_api_url, params=params)
             request_result.raise_for_status()
         except(requests.RequestException):
             log.logging.warning('Ошибка сети')
-        countries_fetch_result = json.loads(unicodedata.normalize('NFKD', request_result.text))
+        countries_fetch_result = json.loads(unicodedata.normalize('NFKD',
+                                            request_result.text))
         for value in countries_fetch_result.values():
             countries_data.append(value)
-    return countries_data 
+    return countries_data
 
 
 def parse_country_data():
@@ -42,14 +43,16 @@ def parse_country_data():
             elif country_name == "Свазиленд":
                 country_name = "Эсватини"
             log.logging.info(country_name)
-            save_countries(country_name=country_name, country_code=country_code)
+            save_countries(country_name=country_name,
+                           country_code=country_code)
         except(AttributeError):
-            log.logging.info('Это не словарь')      
+            log.logging.info('Это не словарь')
 
 
 def save_countries(country_name, country_code):
-   country_exists = Country.query.filter(Country.country_name == country_name).first()
-   if not country_exists:
-       new_country = Country(country_name=country_name, country_code=country_code)
-       db.session.add(new_country)
-       db.session.commit()
+    country_exists = Country.query.filter(Country.country_name == country_name).first()
+    if not country_exists:
+        new_country = Country(country_name=country_name,
+                              country_code=country_code)
+        db.session.add(new_country)
+        db.session.commit()

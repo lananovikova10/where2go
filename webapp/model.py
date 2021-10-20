@@ -6,6 +6,7 @@ from sqlalchemy.sql.schema import ForeignKey
 
 from webapp import db
 
+
 class Country(db.Model):
     __tablename__ = 'countries'
     id = db.Column(db.Integer, primary_key=True)
@@ -48,4 +49,3 @@ class UserRequest(db.Model):
 
     def __repr__(self):
         return f'User {self.user_id} requested from {self.country_dep} to {self.country_arr}'
-
