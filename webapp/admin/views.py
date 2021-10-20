@@ -1,13 +1,11 @@
 
-from flask import redirect, flash, url_for, request, Blueprint
+from flask import redirect, flash, url_for, request
 from flask_admin.base import AdminIndexView
 from flask_login import current_user
 
 
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired
-
-blueprint = Blueprint('admin_related', __name__, url_prefix='/admin')
 
 # делает страницу админки доступной только для админов
 class AdminView(AdminIndexView):

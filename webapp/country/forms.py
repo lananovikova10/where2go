@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, SelectField
 from wtforms.validators import DataRequired
 
-from webapp.country.models import Country
+from webapp.country.models import Country, UserRequest
 from webapp import app, db
 
 class CounryChoose(FlaskForm):

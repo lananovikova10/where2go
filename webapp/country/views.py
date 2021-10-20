@@ -1,12 +1,12 @@
 from flask import render_template, redirect, flash, url_for, request, Blueprint
 
-from flask_login import LoginManager, current_user, login_required
 
-from webapp import app
+from flask_login import current_user, login_required
 
-from webapp.country.forms import CounryChoose
+
+from webapp.country.forms import CounryChoose, UserRequest
 from webapp import db
-from webapp.country.models import UserRequest
+
 
 blueprint = Blueprint('country_related', __name__, url_prefix='/countries')
 
