@@ -22,8 +22,7 @@ class UserAdmin(ModelView):
     # хеширует пароль при создании юзера
     def on_model_change(self, form, User, is_created):
         if form.password.data:
-            User.set_password(form.password.data)
-    
+            User.set_password(form.password.data)  
     # проверка при создании
     form_args = {
         'login': {'validators': [DataRequired()]},
