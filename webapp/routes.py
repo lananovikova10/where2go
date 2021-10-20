@@ -5,7 +5,7 @@ from flask_login import LoginManager, login_user, logout_user, current_user, log
 
 from webapp import app
 
-from webapp.forms import LoginForm, RegistrationForm, CounryChoose
+from webapp.user.forms import LoginForm, RegistrationForm, CounryChoose
 from webapp.model import db, User, UserRequest, Country
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired

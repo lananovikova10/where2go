@@ -3,6 +3,9 @@ from flask import render_template, redirect, flash, url_for, Blueprint
 
 from flask_login import login_user, logout_user, current_user
 
+from webapp import db
+from webapp.user.forms import LoginForm, RegistrationForm, User
+
 
 blueprint = Blueprint('user_related', __name__, url_prefix='/users')
 
@@ -44,6 +47,3 @@ def register():
         flash('Поздравляем, вы зарегистрировались!')
         return redirect(url_for('user_related.login'))
     return render_template('user/register.html', page_title='Страница регистрации', form=form)
-
-from webapp import db
-from webapp.user.forms import LoginForm, RegistrationForm, User

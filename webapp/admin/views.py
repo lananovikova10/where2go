@@ -44,3 +44,13 @@ class UserRequestAdmin(ModelView):
         'User': {'validators': [DataRequired()]},
         }
     column_filters = ['user_id',]
+
+class CountryAdmin(ModelView):
+    form_args = {
+        'country_code': {'validators': [DataRequired()]},
+        'country_name': {'validators': [DataRequired()]},
+        }
+    column_searchable_list = ['country_name', ]
+    can_delete = False
+    can_edit = False
+    can_create = False
