@@ -2,6 +2,7 @@ import requests
 import json
 import unicodedata
 
+
 from webapp import log
 from webapp import app
 from webapp.country.models import Country

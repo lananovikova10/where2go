@@ -38,7 +38,7 @@ def process_country():
     else: 
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
-
+        
 
 @blueprint.route('/country_request')
 @login_required

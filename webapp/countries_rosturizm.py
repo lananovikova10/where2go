@@ -12,7 +12,7 @@ def get_info_rosturizm(country_arr):
         data = parse_conditions_rosturizm(html, country_arr)
         log.logging.info("html")
         return data
-    else: 
+    else:
         return None
 
 
@@ -30,14 +30,13 @@ def parse_conditions_rosturizm(html, country_arr):
     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
     log.logging.info(all_published_country)
     for item in all_published_country:
-        # log.logging.info(item)
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
             log.logging.info(info_block)
             return get_conditions(info_block)
     return {}
 
-    
+
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
@@ -53,14 +52,13 @@ def get_conditions(info_block):
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         elif i.text == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        else: 
+        else:
             if i.text == 'Ограничения:':
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-                log.logging.info('ogranichenya!!!')
             elif i.text == 'Полезные телефоны':
                 pass
-            else: 
+            else:
                 log.logging.info('Данные об ограничениях не пришли')
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = 'Нет данных'
