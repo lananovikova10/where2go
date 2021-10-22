@@ -7,6 +7,7 @@ from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired
 
+
 # делает страницу админки доступной только для админов
 class AdminView(AdminIndexView):
 
@@ -23,7 +24,7 @@ class UserAdmin(ModelView):
     # хеширует пароль при создании юзера
     def on_model_change(self, form, User, is_created):
         if form.password.data:
-            User.set_password(form.password.data)  
+            User.set_password(form.password.data)
     # проверка при создании
     form_args = {
         'login': {'validators': [DataRequired()]},
@@ -31,9 +32,9 @@ class UserAdmin(ModelView):
         'password': {'validators': [DataRequired()]}
         }
     # скрывает поле user_requests на форме
-    form_excluded_columns = ['user_requests',]
+    form_excluded_columns = ['user_requests', ]
     # добавляет поиск по email
-    column_searchable_list = ['email',]
+    column_searchable_list = ['email', ]
     # добавляет фильтр по admin
     column_filters = ['admin']
 

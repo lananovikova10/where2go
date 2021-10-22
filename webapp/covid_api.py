@@ -1,6 +1,6 @@
 import requests
-import pprint
 from webapp import log
+
 
 # получает данные о случаях (/cases) по АПИ
 def covid_by_country(country_arr):
@@ -28,11 +28,8 @@ def parse_covid_data(covid):
     covid_data['population'] = int(covid['All']['population'])
     covid_data['confirmed'] = int(covid['All']['confirmed'])
     covid_data['deaths'] = int(covid['All']['deaths'])
-    covid_data['health index'] = 100 - int(100 * (covid_data['confirmed']) / (covid_data['population']))
+    health_index = 100 - int(100 * (covid_data['confirmed']) / (covid_data['population']))
+    if health_index == 100:
+        health_index = '>99'
+    covid_data['health index'] = health_index
     return covid_data
-
-
-if __name__ == "__main__":
-    cov = covid_by_country("HU")
-
-    pprint.pprint(cov)

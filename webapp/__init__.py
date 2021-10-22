@@ -27,7 +27,7 @@ def load_user(user_id):
     return User.query.get(user_id)
 
 from webapp.country.models import UserRequest, Country
-from webapp.user.models import User 
+from webapp.user.models import User
 from webapp.user.views import blueprint as user_blueprint
 from webapp.country.views import blueprint as country_blueprint
 from webapp.main.views import blueprint as main_blueprint
