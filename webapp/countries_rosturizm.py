@@ -15,6 +15,16 @@ def get_info_rosturizm(country_arr):
         return None
 
 
+def get_countries_rosturizm():
+    url = "https://city.russia.travel/safety/kakie_strany_otkryty/"
+    html = get_html(url)
+    if html:
+        data = get_accepted_countries(html)
+        return data
+    else:
+        return None
+
+
 def get_html(url):
     try:
         result = requests.get(url)
@@ -22,6 +32,18 @@ def get_html(url):
         return result.text
     except(requests.RequestException, ValueError):
         return None
+
+
+def get_accepted_countries(html):
+    all_published_countries = []
+    open_countries = []
+    soup = BeautifulSoup(html, 'html.parser')
+    all_published_countries = soup.findAll('a', style='color:#1f4cff !important;')
+    print(all_published_countries)
+    for country_object in all_published_countries:
+        open_countries.append(country_object.text)
+        open_countries.sort()
+    return open_countries
 
 
 def parse_conditions_rosturizm(html, country_arr):

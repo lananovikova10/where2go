@@ -4,10 +4,11 @@ from flask import render_template, redirect, flash, url_for, request, Blueprint
 from flask_login import current_user, login_required
 
 
-from webapp.country.forms import CounryChoose, UserRequest
+from webapp.country.forms import CounryChoose, UserRequest, Country
 from webapp import db
 
 from webapp.countries_rosturizm import get_info_rosturizm
+from webapp.countries_rosturizm import get_countries_rosturizm
 from webapp import log
 
 
@@ -65,3 +66,23 @@ def country_request():
         return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
                                 transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
                                 conditions = conditions, restrictions = restrictions)
+
+
+@blueprint.route('/country_list')
+def get_open_countries(): 
+    title = f"Какие страны открыты для россиян"
+    countries_list = get_countries_rosturizm()
+    countries_data = {}
+    country_to_id_mapping = []
+    for country in countries_list:
+        log.logging.info(country)
+        country_from_db = Country.query.filter_by(country_name=country).first()
+        if country_from_db:
+            log.logging.info(country_from_db.country_name)
+            countries_data['country_id'] = country_from_db.id
+            countries_data['country_name'] = country_from_db.country_name
+            log.logging.info(countries_data)
+            country_to_id_mapping.append(countries_data.copy())
+    log.logging.info(country_to_id_mapping)
+
+    return render_template('country/country_list.html', page_title=title, countries_list=countries_list)
