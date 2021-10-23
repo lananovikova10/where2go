@@ -4,8 +4,9 @@ from webapp.country.forms import CounryChoose
 
 blueprint = Blueprint('main_page', __name__)
 
+
 @blueprint.route("/")
 def display():
     title = 'Куда поехать теперь?'
     country_choosed = CounryChoose()
-    return render_template('index.html', page_title = title, form = country_choosed)
+    return render_template('index.html', page_title=title, form=country_choosed)
