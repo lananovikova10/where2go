@@ -8,6 +8,7 @@
 1. запуск: 
 * Linux и Mac: `export FLASK_APP=webapp && export FLASK_ENV=development && flask run`
 * Windows: `set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run`
+    либо запуск (env) D:\LearnPython\where2go>`run`
 
 2. После установки внешних модулей обновлять зависимости в корневой папке командой `python -m pip freeze > requirements.txt` и ставить их себе в venv при продолжении работы над проектом с помощью `pip install -r requirements.txt`.
 
