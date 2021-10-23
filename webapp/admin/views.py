@@ -32,9 +32,9 @@ class UserAdmin(ModelView):
         'password': {'validators': [DataRequired()]}
         }
     # скрывает поле user_requests на форме
-    form_excluded_columns = ['user_requests', ]
+    form_excluded_columns = ['user_requests',]
     # добавляет поиск по email
-    column_searchable_list = ['email', ]
+    column_searchable_list = ['email',]
     # добавляет фильтр по admin
     column_filters = ['admin']
 
@@ -53,7 +53,7 @@ class CountryAdmin(ModelView):
         'country_code': {'validators': [DataRequired()]},
         'country_name': {'validators': [DataRequired()]},
         }
-    column_searchable_list = ['country_name', ]
+    column_searchable_list = ['country_name',]
     can_delete = False
     can_edit = False
     can_create = False
