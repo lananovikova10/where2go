@@ -49,33 +49,19 @@ def country_request():
     arr = que[0].country_arr
     restrictions_by_country = get_info_rosturizm(arr)
     log.logging.info(arr)
+    no_data_by_field = "У нас пока нет информации"
     if restrictions_by_country == {}:
         no_data_by_country = "Сюда пока нельзя"
         log.logging.info(restrictions_by_country)
-        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country)
+        return render_template('country/country_request.html', page_title=title, 
+                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country)
     else:
-        if 'transportation' in restrictions_by_country:
-            transportation = restrictions_by_country['transportation']
-        else:
-            transportation = "У нас пока нет информации"
-        if 'visa' in restrictions_by_country:
-            visa = restrictions_by_country['visa']
-        else:
-            visa = "У нас пока нет информации"
-        if 'vaccine' in restrictions_by_country:
-            vaccine = restrictions_by_country['vaccine']
-        else:
-            vaccine = "У нас пока нет информации"
-        if 'open_objects' in restrictions_by_country:
-            open_objects = restrictions_by_country['open_objects']
-        else:
-            open_objects = "У нас пока нет информации"
-        if 'conditions' in restrictions_by_country:
-            conditions = restrictions_by_country['conditions']
-        else:
-            conditions = "У нас пока нет информации"    
-        if 'restrictions' in restrictions_by_country:
-            lockdown_restrictions = restrictions_by_country['restrictions']
-        else:
-            lockdown_restrictions = "У нас пока нет информации"
-        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, conditions = conditions, lockdown_restrictions = lockdown_restrictions)
+        transportation = restrictions_by_country.get('transportation', no_data_by_field) 
+        visa = restrictions_by_country.get('visa', no_data_by_field)
+        vaccine = restrictions_by_country.get('vaccine', no_data_by_field)
+        open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
+        conditions = restrictions_by_country.get('conditions', no_data_by_field)  
+        restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
+        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
+                                transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
+                                conditions = conditions, restrictions = restrictions)

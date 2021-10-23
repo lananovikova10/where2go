@@ -10,6 +10,7 @@ from webapp.country.models import Country, UserRequest
 from webapp import app, db
 from webapp import log
 
+from webapp.country import map_countries
 
 class CounryChoose(FlaskForm):
     with app.app_context():
@@ -18,20 +19,8 @@ class CounryChoose(FlaskForm):
         for country in country_info_query:
             country = str(country)
             country = country[2:][:-3]
-            if country == "Южная Африка":
-                country = "ЮАР"
-            elif country == "Объединенные Арабские Эмираты":
-                country = "ОАЭ"
-            elif country == "Соединенные Штаты":
-                country = "США"  
-            elif country == "Соединенное Королевство":
-                country = "Великобритания"
-            elif country == "Багамы":
-                country = "Багамские острова" 
-            elif country == "Танзания, Объединенная Республика":
-                country = "Танзания" 
-            elif country == "Доминиканская Республика":
-                country = "Доминикана"
+            if country in map_countries.Countries.keys():
+                country = map_countries.Countries.get(country)
             log.logging.info(country)
             unicodedata.normalize('NFKD', country)
             country = country.replace("и\u0306", "й")

@@ -10,7 +10,6 @@ def get_info_rosturizm(country_arr):
     html = get_html(url)
     if html:
         data = parse_conditions_rosturizm(html, country_arr)
-        log.logging.info("html")
         return data
     else:
         return None
@@ -28,11 +27,10 @@ def get_html(url):
 def parse_conditions_rosturizm(html, country_arr):
     soup = BeautifulSoup(html, 'html.parser')
     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
-    log.logging.info(all_published_country)
+    log.logging.debug(all_published_country)
     for item in all_published_country:
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
-            log.logging.info(info_block)
             return get_conditions(info_block)
     return {}
 
@@ -40,12 +38,12 @@ def parse_conditions_rosturizm(html, country_arr):
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
-    log.logging.info(type(conditions_info))
+    log.logging.debug(type(conditions_info))
     for i in conditions_info:
         if i.text == 'Транспортное сообщение':
             country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
         elif i.text == 'Транспортное сообщение:':
-              country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
+            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
         elif i.text == 'Прямое авиасообщение':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         elif i.text == 'Прямое чартерное авиасообщение':
