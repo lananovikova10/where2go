@@ -39,6 +39,7 @@ def parse_country_data():
         try: 
             country_code = country_object.get('id')
             country_name = country_object.get('name')
+            country_name = country_name.replace("и\u0306", "й")
             if country_name == "Македония":
                 country_name = "Северная Македония"
             elif country_name == "Свазиленд":

@@ -69,7 +69,6 @@ def country_request():
 
 
 def country_covid_request(arr):
-    arr = arr.replace("й", "и\u0306")
     country_query = Country.query.filter(Country.country_name==arr).first()
     country_code_resieved = country_query.country_code
     covid_data = covid_api.get_covid_data(country_code_resieved)

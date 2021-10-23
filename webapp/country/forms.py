@@ -24,7 +24,6 @@ class CounryChoose(FlaskForm):
                 country = map_countries.Countries.get(country)
             log.logging.info(country)
             unicodedata.normalize('NFKD', country)
-            country = country.replace("и\u0306", "й")
             log.logging.info(country)
             country_name_list.append(country)
             country_name_list.sort()
