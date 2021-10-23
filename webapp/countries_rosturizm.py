@@ -38,7 +38,7 @@ def parse_conditions_rosturizm(html, country_arr):
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
-    log.logging.debug(type(conditions_info))
+    log.logging.info(conditions_info)
     for i in conditions_info:
         if i.text == 'Транспортное сообщение':
             country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
@@ -51,12 +51,13 @@ def get_conditions(info_block):
         elif i.text == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         else:
-            if i.text == 'Ограничения:':
+            if i.text == 'Ограничения:' or i.text == 'Ограничения: ': 
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
             elif i.text == 'Полезные телефоны':
-                pass
+                country_conditions['contacts'] = info_block.text.split('Полезные телефоны')[1].strip(string.punctuation).strip()
             else:
+                log.logging.info(i.text)
                 log.logging.info('Данные об ограничениях не пришли')
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = 'Нет данных'
