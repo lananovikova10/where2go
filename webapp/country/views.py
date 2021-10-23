@@ -46,7 +46,3 @@ def country_request():
     country_code_resieved = country_query.country_code
     covid_data = covid_api.get_covid_data(country_code_resieved)
     return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, covid_data=covid_data)
-
-
-# if dict is None
-# if not dict 

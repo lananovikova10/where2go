@@ -17,13 +17,19 @@ def get_covid_data(country_arr):
         return None
 
     covid_info_from_api = result.json()
+
+    # проверка получения данных по стране, а не по всему миру
     if 'All' not in covid_info_from_api:
+        log.logging.info(f'Covid data is not exist, country code {country_arr}')
         return {}
-    fetching_info_exist = [True for elem in ['population', 'confirmed',
-                                                'deaths'] if elem in covid_info_from_api['All']]
-    if all(fetching_info_exist):
+    cathegories_exist = set(covid_info_from_api['All'])
+    cathegories_needed = set(['population', 'confirmed', 'deaths'])
+
+    # проверка, что множество cathegories_needed полностью входит в множество cathegories_exist:
+    if cathegories_needed.issubset(cathegories_exist):
         return parse_covid_data(covid_info_from_api)
     else:
+        log.logging.info(f'Covid data is not complete, country code {country_arr}')
         return {}
 
 
