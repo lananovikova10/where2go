@@ -21,20 +21,29 @@
                             Страна прибытия: {{ country_arr }}
                         </h2>
                     </p>
-                    {% if covid_data%}
+                    {% if covid_data is none %}
+                    <h5>
+                        <br>
+                        <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
+                    </h5>
+                    {% elif not covid_data %}
+                    <h5>
+                        <br>
+                        <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
+                    </h5>
+                    {% else %}
                         <h4>
                             <br>
                             <p>Население: {{ covid_data['population'] }} человек</p>
                             <p>Зарегистрированных случаев COVID-19: {{ covid_data['confirmed'] }}</p>
                             <p>Летальных исходов: {{ covid_data['deaths'] }}</p>
+                            {% if covid_data['health index'] %}
                             <p>Индекс здоровья: {{ covid_data['health index'] }}% *</p> <br>
+                            {% else %}
+                            <p>Индекс здоровья: {{ covid_data['health index text'] }}% *</p> <br>
+                            {% endif %}
                         </h4>
                         *% незаболевшего населения 
-                    {% else %}
-                        <h5>
-                            <br>
-                            <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
-                        </h5>
                     {% endif %}
                     
                     <h3><a href="{{ url_for('main_page.display') }}">на главную</a></h3>

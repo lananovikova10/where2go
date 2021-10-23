@@ -42,8 +42,11 @@ def country_request():
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
-    code_query = Country.query.filter(Country.country_name==arr).first()
-    country_code_resieved = code_query.country_code
-    covid_data = covid_api.covid_by_country(country_code_resieved)
-
+    country_query = Country.query.filter(Country.country_name==arr).first()
+    country_code_resieved = country_query.country_code
+    covid_data = covid_api.get_covid_data(country_code_resieved)
     return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, covid_data=covid_data)
+
+
+# if dict is None
+# if not dict 
