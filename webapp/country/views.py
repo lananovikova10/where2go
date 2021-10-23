@@ -35,15 +35,17 @@ def process_country():
 
         db.session.add(choice)
         db.session.commit()
-        return redirect(url_for('country_related.country_request'))
+        country = Country.query.filter_by(country_name=select_arr).first()
+        print(country.id)
+        return redirect(url_for('country_related.country_request', identifier=country.id))
     else: 
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
-        
 
-@blueprint.route('/country_request')
+
+@blueprint.route('/country_request/<identifier>')
 @login_required
-def country_request():
+def country_request(identifier):
     title = f'Актуальная информация по странам'
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
@@ -85,4 +87,4 @@ def get_open_countries():
             country_to_id_mapping.append(countries_data.copy())
     log.logging.info(country_to_id_mapping)
 
-    return render_template('country/country_list.html', page_title=title, countries_list=countries_list)
+    return render_template('country/country_list.html', page_title=title, countries_list=countries_list, identifier=countries_data['country_id'])
