@@ -7,8 +7,12 @@ from flask_login import current_user, login_required
 from webapp.country.forms import CounryChoose, UserRequest
 from webapp import db
 
+from webapp.countries_rosturizm import get_info_rosturizm
+from webapp import log
+
 
 blueprint = Blueprint('country_related', __name__, url_prefix='/countries')
+
 
 @blueprint.route('/process_country', methods=['GET', 'POST'])
 def check_signin():
@@ -17,6 +21,7 @@ def check_signin():
     else:
         flash('пожалуйста, авторизируйтесь')
         return redirect(url_for('user_related.login'))
+
 
 def process_country():
     form = CounryChoose()
@@ -33,6 +38,7 @@ def process_country():
     else: 
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
+        
 
 @blueprint.route('/country_request')
 @login_required
@@ -41,4 +47,21 @@ def country_request():
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
-    return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr)
+    restrictions_by_country = get_info_rosturizm(arr)
+    log.logging.info(arr)
+    no_data_by_field = "У нас пока нет информации"
+    if restrictions_by_country == {}:
+        no_data_by_country = "Сюда пока нельзя"
+        log.logging.info(restrictions_by_country)
+        return render_template('country/country_request.html', page_title=title, 
+                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country)
+    else:
+        transportation = restrictions_by_country.get('transportation', no_data_by_field) 
+        visa = restrictions_by_country.get('visa', no_data_by_field)
+        vaccine = restrictions_by_country.get('vaccine', no_data_by_field)
+        open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
+        conditions = restrictions_by_country.get('conditions', no_data_by_field)  
+        restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
+        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
+                                transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
+                                conditions = conditions, restrictions = restrictions)
