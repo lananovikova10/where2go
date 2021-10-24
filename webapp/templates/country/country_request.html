@@ -17,8 +17,8 @@
                     <p>
                     <div class="col-sm-9">
                         <h2>
-                    Отправление из: {{ country_dep }} <br><br>
-                    Прибытие в: {{ country_arr }} <br><br>
+                        Страна отправления: {{ country_dep }} <br><br>
+                        Страна прибытия: {{ country_arr }} <br><br>
                         </h2>
                     {% if no_data_by_country %}
                         <p>{{ no_data_by_country }}</p>
@@ -31,7 +31,32 @@
                         <p><b>Ограничения:</b> {{ restrictions }}</p>
                         </p>
                     {% endif %}
-                    <h3><a href="{{ url_for('main_page.display') }}" class="btn btn-link">На Главную</a></h3>
+                    {% if covid_data is none %}
+                    <h5>
+                        <br>
+                        <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
+                    </h5>
+                    {% elif not covid_data %}
+                    <h5>
+                        <br>
+                        <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
+                    </h5>
+                    {% else %}
+                        <h4>
+                            <br>
+                            <p>Население: {{ covid_data['population'] }} человек</p>
+                            <p>Зарегистрированных случаев COVID-19: {{ covid_data['confirmed'] }}</p>
+                            <p>Летальных исходов: {{ covid_data['deaths'] }}</p>
+                            {% if covid_data['health index'] %}
+                            <p>Индекс здоровья: {{ covid_data['health index'] }}% *</p> <br>
+                            {% else %}
+                            <p>Индекс здоровья: {{ covid_data['health index text'] }}% *</p> <br>
+                            {% endif %}
+                        </h4>
+                        *% незаболевшего населения 
+                    {% endif %}
+                    
+                    <h3><a href="{{ url_for('main_page.display') }}">на главную</a></h3>
                 </div>
             </div>
 {% endblock %}

@@ -1,11 +1,15 @@
 from flask import render_template, redirect, flash, url_for, request, Blueprint
 
-
 from flask_login import current_user, login_required
 
+<<<<<<< HEAD
 
 from webapp.country.forms import CounryChoose, UserRequest, Country
 from webapp import db
+=======
+from webapp.country.forms import CounryChoose, UserRequest, Country
+from webapp import db, covid_api
+>>>>>>> main
 
 from webapp.countries_rosturizm import get_info_rosturizm
 from webapp.countries_rosturizm import get_countries_rosturizm
@@ -31,7 +35,7 @@ def process_country():
         select_dep = request.form.get('country_dep')
         select_arr = request.form.get('country_arr')
     if select_dep != select_arr:
-        choice = UserRequest(user_id=current_user.id, country_dep = select_dep, country_arr = select_arr)
+        choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
 
         db.session.add(choice)
         db.session.commit()
@@ -56,8 +60,10 @@ def country_request(identifier):
     if restrictions_by_country == {}:
         no_data_by_country = "Сюда пока нельзя"
         log.logging.info(restrictions_by_country)
+        covid_data = country_covid_request(arr)
         return render_template('country/country_request.html', page_title=title, 
-                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country)
+                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country,
+                                covid_data=covid_data)
     else:
         transportation = restrictions_by_country.get('transportation', no_data_by_field) 
         visa = restrictions_by_country.get('visa', no_data_by_field)
@@ -65,6 +71,7 @@ def country_request(identifier):
         open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
         conditions = restrictions_by_country.get('conditions', no_data_by_field)  
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
+        covid_data = country_covid_request(arr)
         return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
                                 transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
                                 conditions = conditions, restrictions = restrictions)
@@ -87,4 +94,12 @@ def get_open_countries():
             country_to_id_mapping.append(countries_data.copy())
     log.logging.info(country_to_id_mapping)
 
-    return render_template('country/country_list.html', page_title=title, countries_list=countries_list, identifier=countries_data['country_id'])
+    return render_template('country/country_list.html', page_title=title, countries_list=countries_list, identifier=countries_data['country_id'],
+                                conditions = conditions, restrictions = restrictions, covid_data=covid_data)
+
+
+def country_covid_request(arr):
+    country_query = Country.query.filter(Country.country_name==arr).first()
+    country_code_resieved = country_query.country_code
+    covid_data = covid_api.get_covid_data(country_code_resieved)
+    return covid_data

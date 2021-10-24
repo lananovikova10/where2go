@@ -16,7 +16,7 @@
         <div class="container">
           <nav class="navbar navbar-light bg-light">
             <div class="container-fluid">
-            <a class="navbar-brand" href="#">Куда поехать</a>
+            <a class="navbar-brand" href="/">Куда поехать</a>
             <ul class="nav navbar-nav navbar-right">
               {% if current_user.is_authenticated %}
               <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>
@@ -27,7 +27,7 @@
                 {% if current_user.is_admin %}
                 <br>
                 <br>
-                <a href="admin">Админка</a>
+                <a href="/admin">Админка</a>
                 {% endif %}
               </li>
             </ul>
