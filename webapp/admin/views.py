@@ -7,6 +7,7 @@ from flask_login import current_user
 from flask_admin.contrib.sqla import ModelView
 from wtforms.validators import Email, DataRequired
 
+
 # делает страницу админки доступной только для админов
 class AdminView(AdminIndexView):
 
@@ -17,13 +18,13 @@ class AdminView(AdminIndexView):
         flash('Вы не админ')
         return redirect(url_for('display', next=request.url))
 
+
 # настройки для отображения таблицы в админке
 class UserAdmin(ModelView):
     # хеширует пароль при создании юзера
     def on_model_change(self, form, User, is_created):
         if form.password.data:
             User.set_password(form.password.data)
-    
     # проверка при создании
     form_args = {
         'login': {'validators': [DataRequired()]},
@@ -37,20 +38,22 @@ class UserAdmin(ModelView):
     # добавляет фильтр по admin
     column_filters = ['admin']
 
+
 class UserRequestAdmin(ModelView):
     form_args = {
         'country_arr': {'validators': [DataRequired()]},
         'country_dep': {'validators': [DataRequired()]},
         'User': {'validators': [DataRequired()]},
         }
-    column_filters = ['user_id',]
+    column_filters = ['user_id', ]
+
 
 class CountryAdmin(ModelView):
     form_args = {
         'country_code': {'validators': [DataRequired()]},
         'country_name': {'validators': [DataRequired()]},
         }
-    column_searchable_list = ['country_name', ]
+    column_searchable_list = ['country_name',]
     can_delete = False
     can_edit = False
     can_create = False
