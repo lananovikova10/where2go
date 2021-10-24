@@ -1,62 +1,55 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <h1>{{ page_title }}</h1>
-            <div class="row">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-9">
-                    <h3>{{ title }}</h3>
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        <div class="alert alert-warning" role="alert">
-                            {{ messages[-1] }}<br>
-                        </div>
-                        {% endif %}
-                    {% endwith %}
-                    <br><br>
-                    <p>
-                    <div class="col-sm-9">
-                        <h2>
-                        Страна отправления: {{ country_dep }} <br><br>
-                        Страна прибытия: {{ country_arr }} <br><br>
-                        </h2>
-                    {% if no_data_by_country %}
-                        <p>{{ no_data_by_country }}</p>
-                    {% else %}
-                        <p><b>Как добраться:</b> {{ transportation }}</p>
-                        <p><b>Нужна ли виза:</b> {{ visa }}</p>
-                        <p><b>Нужно для въезда:</b> {{ conditions }}</p>
-                        <p><b>Какие вакцины признаются:</b> {{ vaccine }}</p>
-                        <p><b>Что открыто:</b> {{ open_objects }}</p>
-                        <p><b>Ограничения:</b> {{ restrictions }}</p>
-                        </p>
-                    {% endif %}
-                    {% if covid_data is none %}
-                    <h5>
-                        <br>
-                        <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
-                    </h5>
-                    {% elif not covid_data %}
-                    <h5>
-                        <br>
-                        <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
-                    </h5>
-                    {% else %}
-                        <h4>
-                            <br>
-                            <p>Население: {{ covid_data['population'] }} человек</p>
-                            <p>Зарегистрированных случаев COVID-19: {{ covid_data['confirmed'] }}</p>
-                            <p>Летальных исходов: {{ covid_data['deaths'] }}</p>
-                            {% if covid_data['health index'] %}
-                            <p>Индекс здоровья: {{ covid_data['health index'] }}% *</p> <br>
-                            {% else %}
-                            <p>Индекс здоровья: {{ covid_data['health index text'] }}% *</p> <br>
-                            {% endif %}
-                        </h4>
-                        *% незаболевшего населения 
-                    {% endif %}
-                    
-                    <h3><a href="{{ url_for('main_page.display') }}">на главную</a></h3>
-                </div>
+<h1>{{ page_title }}</h1>
+    <div class="row">
+        <div class="col-sm-9-center">
+            {% include "messages.html" %}
+            <p><h5>Ваш запрос:</h5></p>
+        </div>
+        <div class="col-sm-12-center">
+            <p><h3>Страна отправления: {{ country_dep }}</p>
+            <p>Страна прибытия: {{ country_arr }}</h3></p>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h4>Условия въезда</h4>
+                {% if no_data_by_country %}
+                        <p><i>{{ no_data_by_country }}</i></p>
+                {% else %}
+                    <p><b>Как добраться:</b> {{ transportation }}</p>
+                    <p><b>Нужна ли виза:</b> {{ visa }}</p>
+                    <p><b>Нужно для въезда:</b> {{ conditions }}</p>
+                    <p><b>Какие вакцины признаются:</b> {{ vaccine }}</p>
+                    <p><b>Что открыто:</b> {{ open_objects }}</p>
+                    <p><b>Ограничения:</b> {{ restrictions }}</p>
+                    </p>
+                {% endif %}
             </div>
+            <div class="col-4">
+                <h4>Сведения о распространении COVID-19</h4>
+                {% if covid_data is none %}
+                    <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
+                {% elif not covid_data %}
+                    <p><i>Информация о распространении COVID-19 в стране прибытия отсутствует</i></p>
+                {% else %}
+                    <p><b>Население:</b> {{ covid_data['population'] }} человек</p>
+                    <p><b>Зарегистрированных случаев COVID-19:</b> {{ covid_data['confirmed'] }}</p>
+                    <p><b>Летальных исходов:</b> {{ covid_data['deaths'] }}</p>
+                    {% if covid_data['health index'] %}
+                    <p><b>Индекс здоровья:</b> {{ covid_data['health index'] }}% *</p> <br>
+                    {% else %}
+                    <p><b>Индекс здоровья:</b> {{ covid_data['health index text'] }}% *</p> <br>
+                    {% endif %}
+                    *% незаболевшего населения 
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h4><a href="{{ url_for('main_page.display') }}">новый запрос</a></h4>
+    </div>
+
 {% endblock %}
