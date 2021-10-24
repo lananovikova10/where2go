@@ -73,10 +73,10 @@ def get_conditions(info_block):
         elif i.text == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         else:
-            if i.text == 'Ограничения:' or i.text == 'Ограничения: ': 
+            if i.text.startswith('Ограничения'): 
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-            elif i.text == 'Полезные телефоны':
+            elif i.text.startswith('Полезные телефоны'):
                 country_conditions['contacts'] = info_block.text.split('Полезные телефоны')[1].strip(string.punctuation).strip()
             else:
                 log.logging.info(i.text)

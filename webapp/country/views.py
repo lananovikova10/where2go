@@ -36,7 +36,7 @@ def process_country():
         db.session.add(choice)
         db.session.commit()
         country = Country.query.filter_by(country_name=select_arr).first()
-        print(country.id)
+        log.logging.info(country.id)
         return redirect(url_for('country_related.country_request', identifier=country.id))
     else: 
         flash('одинаковые страны, попробуйте еще')
