@@ -1,12 +1,10 @@
 import requests
 import json
 import unicodedata
-
-
 from webapp import log
-from webapp import app
+from webapp import app, db
 from webapp.country.models import Country
-from webapp import db
+from webapp import map_countries
 from webapp.config import Config
 
 continents_list = ["Европа", "Азия", "Океания", "Африка", "Америка"]
@@ -40,10 +38,8 @@ def parse_country_data():
             country_code = country_object.get('id')
             country_name = country_object.get('name')
             country_name = country_name.replace("и\u0306", "й")
-            if country_name == "Македония":
-                country_name = "Северная Македония"
-            elif country_name == "Свазиленд":
-                country_name = "Эсватини"
+            if country_name in map_countries.Countries.keys():
+                country_name = map_countries.Countries.get(country_name)
             log.logging.info(country_name)
             save_countries(country_name=country_name,
                            country_code=country_code)

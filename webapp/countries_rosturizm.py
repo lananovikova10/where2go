@@ -1,7 +1,5 @@
 import requests, string
 from bs4 import BeautifulSoup
-
-
 from webapp import log
 
 
@@ -39,14 +37,11 @@ def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
     log.logging.debug(type(conditions_info))
+    log.logging.debug(conditions_info)
     for i in conditions_info:
-        if i.text == 'Транспортное сообщение':
+        if i.text.startswith('Транспортное'):
             country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
-        elif i.text == 'Транспортное сообщение:':
-            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
-        elif i.text == 'Прямое авиасообщение':
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        elif i.text == 'Прямое чартерное авиасообщение':
+        elif i.text.startswith('Прямое'):
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         elif i.text == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
