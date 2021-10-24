@@ -23,7 +23,7 @@
             <div class="col-8">
                 <h4>Условия въезда</h4>
                 {% if no_data_by_country %}
-                        <p>{{ no_data_by_country }}</p>
+                        <p><i>{{ no_data_by_country }}</i></p>
                 {% else %}
                     <p><b>Как добраться:</b> {{ transportation }}</p>
                     <p><b>Нужна ли виза:</b> {{ visa }}</p>
