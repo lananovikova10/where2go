@@ -8,13 +8,11 @@
                {% include "messages.html" %}
                <ol>
                     {% for i in all_user_requests %}
-                        {% for j in range(1, 100) %}
                         <li><a href="{{ i.country_arr }}">
                             Страна отправления: {{ i.country_dep }}
                             Страна прибытия: {{ i.country_arr }} </a></li>
-                        {% endfor %}
-                    
-                {% endfor %}
+                                          
+                    {% endfor %}
                 </ol>
             </div>
         </div>

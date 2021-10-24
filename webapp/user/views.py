@@ -59,6 +59,5 @@ def register():
 @login_required
 def show_user_requests():
     all_user_requests = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).all()
-    user_name = User.query.filter(User.id==current_user.id).first()
     return render_template('user/user_requests.html', page_title='История ваших запросов',
-                           all_user_requests=all_user_requests, user_name=user_name.login)
+                           all_user_requests=all_user_requests, user_name=current_user.login)
