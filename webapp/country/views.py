@@ -58,9 +58,8 @@ def country_conditions_request(arr):
     log.logging.info(arr)
     no_data_by_field = "У нас пока нет информации"
     if restrictions_by_country == {}:
-        no_data_by_country = "Сюда пока нельзя"
         log.logging.info(restrictions_by_country)
-        return 0, no_data_by_country
+        return None
     else:
         transportation = restrictions_by_country.get('transportation', no_data_by_field) 
         visa = restrictions_by_country.get('visa', no_data_by_field)

@@ -22,8 +22,8 @@
         <div class="row justify-content-center">
             <div class="col-8">
                 <h4>Условия въезда</h4>
-                {% if restrictions_by_country[0] == 0 %}
-                        <p><i>{{ restrictions_by_country[1] }}</i></p>
+                {% if restrictions_by_country is none %}
+                        <p><i>Сюда пока нельзя</i></p>
                 {% else %}
                     <p><b>Как добраться:</b> {{ restrictions_by_country[0] }}</p>
                     <p><b>Нужна ли виза:</b> {{ restrictions_by_country[1] }}</p>
