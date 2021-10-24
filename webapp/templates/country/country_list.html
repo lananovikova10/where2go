@@ -21,7 +21,7 @@
                                 {% for country in countries_list %}
                                     {% for country_dict in country_to_id_mapping  %}
                                         {% if country_dict['country_name'] == country %}
-                                    <li class="list-group-item"><a href="{{ url_for('country_related.country_request', identifier=country_dict['country_id']) }}">{{ country }}</a></li>
+                                    <li class="list-group-item"><a href="{{ url_for('country_related.process_country_from_list', identifier=country_dict['country_id']) }}">{{ country }}</a></li>
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}

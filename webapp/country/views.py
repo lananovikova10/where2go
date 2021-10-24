@@ -40,12 +40,28 @@ def process_country():
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
 
+@blueprint.route('/process_country_from_list')
+def process_country_from_list():
+    id = request.args.get('identifier')
+    print(id)
+    open_countries = get_open_countries()[0]
+    print(open_countries)
+    select_dep = 'Россия'
+    select_arr = 'Албания'
+    # for element in open_countries:
+    #     if element['country_id'] == id:
+    #         select_arr = element.get('country_name')
+    #         print(select_arr)
+    choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
+    db.session.add(choice)
+    db.session.commit()
+    #country = Country.query.filter_by(country_name=select_arr).first()
+    return redirect(url_for('country_related.country_request', identifier=id))
+
 
 @blueprint.route('/country_request/<identifier>')
 @login_required
 def country_request(identifier):
-    id = request.args.get('identifier')
-    print(id)
     title = f'Актуальная информация по странам'
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
