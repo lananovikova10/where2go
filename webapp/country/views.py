@@ -45,16 +45,21 @@ def country_request():
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
     arr = que[0].country_arr
+    restrictions_by_country = country_conditions_request(arr)
+    covid_data = country_covid_request(arr)
+    return render_template('country/country_request.html', page_title=title, 
+                                country_dep=dep, country_arr=arr,
+                                restrictions_by_country=restrictions_by_country,
+                                covid_data=covid_data)
+
+
+def country_conditions_request(arr):
     restrictions_by_country = get_info_rosturizm(arr)
     log.logging.info(arr)
     no_data_by_field = "У нас пока нет информации"
     if restrictions_by_country == {}:
-        no_data_by_country = "Сюда пока нельзя"
         log.logging.info(restrictions_by_country)
-        covid_data = country_covid_request(arr)
-        return render_template('country/country_request.html', page_title=title, 
-                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country,
-                                covid_data=covid_data)
+        return None
     else:
         transportation = restrictions_by_country.get('transportation', no_data_by_field) 
         visa = restrictions_by_country.get('visa', no_data_by_field)
@@ -62,10 +67,7 @@ def country_request():
         open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
         conditions = restrictions_by_country.get('conditions', no_data_by_field)  
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
-        covid_data = country_covid_request(arr)
-        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
-                                transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
-                                conditions = conditions, restrictions = restrictions, covid_data=covid_data)
+        return transportation, visa, vaccine, open_objects, conditions, restrictions
 
 
 def country_covid_request(arr):
