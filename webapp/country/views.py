@@ -44,7 +44,7 @@ def process_country():
 @blueprint.route('/process_country_from_list')
 def process_country_from_list():
     id = int(request.args.get('identifier'))
-    open_countries = get_open_countries()[1]
+    open_countries = get_open_countries()
     select_dep = 'Россия'
     for element in open_countries:
         if element['country_id'] == id:
@@ -70,7 +70,7 @@ def country_request(identifier):
         log.logging.info(restrictions_by_country)
         covid_data = country_covid_request(arr)
         return render_template('country/country_request.html', page_title=title, 
-                                country_dep=dep, country_arr=arr, no_data_by_country = no_data_by_country,
+                                country_dep=dep, country_arr=arr, no_data_by_country=no_data_by_country,
                                 covid_data=covid_data)
     else:
         transportation = restrictions_by_country.get('transportation', no_data_by_field) 
@@ -81,29 +81,35 @@ def country_request(identifier):
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
         covid_data = country_covid_request(arr)
         return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr,
-                                transportation = transportation, visa=visa, vaccine=vaccine, open_objects=open_objects,
+                                transportation=transportation, visa=visa, vaccine=vaccine, open_objects=open_objects,
                                 conditions=conditions, restrictions=restrictions, covid_data=covid_data)
 
-
-@blueprint.route('/country_list')
 def get_open_countries():
-    title = f"Какие страны открыты для россиян"
     countries_list = get_countries_rosturizm()
-    countries_data = {}
     country_to_id_mapping = []
     for country in countries_list:
         log.logging.info(country)
         country_from_db = Country.query.filter_by(country_name=country).first()
+        countries_data = {}
         if country_from_db:
             log.logging.info(country_from_db.country_name)
             countries_data['country_id'] = country_from_db.id
             countries_data['country_name'] = country_from_db.country_name
             log.logging.info(countries_data)
-            country_to_id_mapping.append(countries_data.copy())
+            country_to_id_mapping.append(countries_data)
     log.logging.info(country_to_id_mapping)
 
+    return country_to_id_mapping
+
+
+@blueprint.route('/country_list')
+def display_countries_list():
+    title = f"Какие страны открыты для россиян"
+    countries_list = get_countries_rosturizm()
+    country_to_id_mapping = get_open_countries()
+
     return render_template('country/country_list.html', page_title=title, countries_list=countries_list,
-                            country_to_id_mapping=country_to_id_mapping), country_to_id_mapping
+                            country_to_id_mapping=country_to_id_mapping)
 
 
 def country_covid_request(arr):

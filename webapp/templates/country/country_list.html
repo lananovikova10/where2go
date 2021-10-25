@@ -6,13 +6,7 @@
                 <div class="col-sm-2"></div>
                 <div class="col-sm-9">
                     <h3>{{ title }}</h3>
-                    {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        <div class="alert alert-warning" role="alert">
-                            {{ messages[-1] }}<br>
-                        </div>
-                        {% endif %}
-                    {% endwith %}
+                    {% include "messages.html" %}
                     <br><br>
                     <p>
                     <div class="col-sm-9">
