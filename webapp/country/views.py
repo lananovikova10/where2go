@@ -40,6 +40,7 @@ def process_country():
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
 
+
 @blueprint.route('/process_country_from_list')
 def process_country_from_list():
     id = int(request.args.get('identifier'))
@@ -79,13 +80,13 @@ def country_request(identifier):
         conditions = restrictions_by_country.get('conditions', no_data_by_field)
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
         covid_data = country_covid_request(arr)
-        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr, 
-                                transportation = transportation, visa = visa, vaccine = vaccine, open_objects = open_objects, 
-                                conditions = conditions, restrictions = restrictions, covid_data=covid_data)
+        return render_template('country/country_request.html', page_title=title, country_dep=dep, country_arr=arr,
+                                transportation = transportation, visa=visa, vaccine=vaccine, open_objects=open_objects,
+                                conditions=conditions, restrictions=restrictions, covid_data=covid_data)
 
 
 @blueprint.route('/country_list')
-def get_open_countries(): 
+def get_open_countries():
     title = f"Какие страны открыты для россиян"
     countries_list = get_countries_rosturizm()
     countries_data = {}
@@ -101,7 +102,8 @@ def get_open_countries():
             country_to_id_mapping.append(countries_data.copy())
     log.logging.info(country_to_id_mapping)
 
-    return render_template('country/country_list.html', page_title=title, countries_list=countries_list, country_to_id_mapping=country_to_id_mapping), country_to_id_mapping
+    return render_template('country/country_list.html', page_title=title, countries_list=countries_list,
+                            country_to_id_mapping=country_to_id_mapping), country_to_id_mapping
 
 
 def country_covid_request(arr):
