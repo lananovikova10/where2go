@@ -42,20 +42,15 @@ def process_country():
 
 @blueprint.route('/process_country_from_list')
 def process_country_from_list():
-    id = request.args.get('identifier')
-    print(id)
-    open_countries = get_open_countries()[0]
-    print(open_countries)
+    id = int(request.args.get('identifier'))
+    open_countries = get_open_countries()[1]
     select_dep = 'Россия'
-    select_arr = 'Албания'
-    # for element in open_countries:
-    #     if element['country_id'] == id:
-    #         select_arr = element.get('country_name')
-    #         print(select_arr)
+    for element in open_countries:
+        if element['country_id'] == id:
+            select_arr = element['country_name']
     choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
     db.session.add(choice)
     db.session.commit()
-    #country = Country.query.filter_by(country_name=select_arr).first()
     return redirect(url_for('country_related.country_request', identifier=id))
 
 
@@ -107,20 +102,6 @@ def get_open_countries():
     log.logging.info(country_to_id_mapping)
 
     return render_template('country/country_list.html', page_title=title, countries_list=countries_list, country_to_id_mapping=country_to_id_mapping), country_to_id_mapping
-
-# def request_from_country_list():
-#     form = CounryChoose()
-#     if form.validate_on_submit():
-#         form.country_dep
-#         select_dep = 'Россия'
-#         select_arr = "Австрия"
-#         choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
-
-#         #db.session.add(choice)
-#         #db.session.commit()
-#         country = Country.query.filter_by(country_name=select_arr).first()
-#         log.logging.info(country.id)
-#         return redirect(url_for('country_related.country_request', identifier=country.id)) 
 
 
 def country_covid_request(arr):

@@ -37,7 +37,6 @@ def get_accepted_countries(html):
     open_countries = []
     soup = BeautifulSoup(html, 'html.parser')
     all_published_countries = soup.findAll('a', style='color:#1f4cff !important;')
-    print(all_published_countries)
     for country_object in all_published_countries:
         open_countries.append(country_object.text)
         open_countries.sort()
