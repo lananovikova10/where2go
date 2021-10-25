@@ -16,15 +16,15 @@
         <div class="row justify-content-center">
             <div class="col-8">
                 <h4>Условия въезда</h4>
-                {% if no_data_by_country %}
-                        <p><i>{{ no_data_by_country }}</i></p>
+                {% if restrictions_by_country is none %}
+                        <p><i>Сюда пока нельзя</i></p>
                 {% else %}
-                    <p><b>Как добраться:</b> {{ transportation }}</p>
-                    <p><b>Нужна ли виза:</b> {{ visa }}</p>
-                    <p><b>Нужно для въезда:</b> {{ conditions }}</p>
-                    <p><b>Какие вакцины признаются:</b> {{ vaccine }}</p>
-                    <p><b>Что открыто:</b> {{ open_objects }}</p>
-                    <p><b>Ограничения:</b> {{ restrictions }}</p>
+                    <p><b>Как добраться:</b> {{ restrictions_by_country[0] }}</p>
+                    <p><b>Нужна ли виза:</b> {{ restrictions_by_country[1] }}</p>
+                    <p><b>Нужно для въезда:</b> {{ restrictions_by_country[2] }}</p>
+                    <p><b>Какие вакцины признаются:</b> {{ restrictions_by_country[3] }}</p>
+                    <p><b>Что открыто:</b> {{ restrictions_by_country[4] }}</p>
+                    <p><b>Ограничения:</b> {{ restrictions_by_country[5] }}</p>
                     </p>
                 {% endif %}
             </div>

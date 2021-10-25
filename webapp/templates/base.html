@@ -21,9 +21,11 @@
               {% if current_user.is_authenticated %}
               <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>
               <li><a href="/countries/country_list">Открытые страны</a></li>
+              <li><a href="{{ url_for('user_related.show_user_requests') }}">Мои запросы</a></li>
                 {% else %}
               <li><a href="{{ url_for('user_related.login') }}">Войти</a></li>
                 {% endif %}
+              
               <li>
                 {% if current_user.is_admin %}
                 <br>
