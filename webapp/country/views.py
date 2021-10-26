@@ -1,10 +1,9 @@
 from flask import render_template, redirect, flash, url_for, request, Blueprint
-
 from flask_login import current_user, login_required
+
 
 from webapp.country.forms import CounryChoose, UserRequest, Country
 from webapp import db, covid_api
-
 from webapp.countries_rosturizm import get_info_rosturizm
 from webapp.countries_rosturizm import get_countries_rosturizm
 from webapp import log
