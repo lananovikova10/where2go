@@ -53,6 +53,7 @@ def country_request():
                                 covid_data=covid_data)
 
 
+# возвращает кортеж из ответов по условиям для страны или None
 def country_conditions_request(arr):
     restrictions_by_country = get_info_rosturizm(arr)
     log.logging.info(arr)
@@ -68,9 +69,10 @@ def country_conditions_request(arr):
         conditions = restrictions_by_country.get('conditions', no_data_by_field)  
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
         log.logging.info(restrictions_by_country)
-        return transportation, visa, vaccine, open_objects, conditions, restrictions
+        return transportation, visa, vaccine, conditions, open_objects, restrictions
 
 
+# возвращает словарь из ответов по covid для страны
 def country_covid_request(arr):
     country_query = Country.query.filter(Country.country_name==arr).first()
     country_code_resieved = country_query.country_code
