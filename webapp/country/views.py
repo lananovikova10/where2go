@@ -67,6 +67,7 @@ def country_conditions_request(arr):
         open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
         conditions = restrictions_by_country.get('conditions', no_data_by_field)  
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
+        log.logging.info(restrictions_by_country)
         return transportation, visa, vaccine, open_objects, conditions, restrictions
 
 

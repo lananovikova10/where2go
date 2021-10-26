@@ -25,7 +25,7 @@ def get_html(url):
 def parse_conditions_rosturizm(html, country_arr):
     soup = BeautifulSoup(html, 'html.parser')
     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
-    log.logging.debug(all_published_country)
+    #log.logging.debug(all_published_country)
     for item in all_published_country:
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
@@ -37,6 +37,7 @@ def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
     log.logging.debug(type(conditions_info))
+    log.logging.info(conditions_info)
     for i in conditions_info:
         if i.text.startswith('Транспортное'):
             country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
@@ -45,13 +46,13 @@ def get_conditions(info_block):
         elif i.text == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         else:
-            if i.text == 'Ограничения:':
+            if i.text.startswith('Ограничения'):
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
             elif i.text == 'Полезные телефоны':
                 pass
             else:
-                log.logging.info('Данные об ограничениях не пришли')
+                # log.logging.info('Данные об ограничениях не пришли')
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = 'Нет данных'
         country_conditions['visa'] = info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()

@@ -18,7 +18,7 @@ class CounryChoose(FlaskForm):
         for country in country_info_query:
             country = str(country)
             country = country[2:][:-3]
-            log.logging.info(country)
+            # log.logging.info(country)
             country_name_list.append(country)
             country_name_list.sort()
 
