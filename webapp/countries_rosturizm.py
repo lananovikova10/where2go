@@ -13,6 +13,16 @@ def get_info_rosturizm(country_arr):
         return None
 
 
+def get_countries_rosturizm():
+    url = "https://city.russia.travel/safety/kakie_strany_otkryty/"
+    html = get_html(url)
+    if html:
+        data = get_accepted_countries(html)
+        return data
+    else:
+        return None
+
+
 def get_html(url):
     try:
         result = requests.get(url)
@@ -20,6 +30,17 @@ def get_html(url):
         return result.text
     except(requests.RequestException, ValueError):
         return None
+
+
+def get_accepted_countries(html):
+    all_published_countries = []
+    open_countries = []
+    soup = BeautifulSoup(html, 'html.parser')
+    all_published_countries = soup.findAll('div', class_='t537__persname t-name t-name_lg t537__bottommargin_sm')
+    for country_object in all_published_countries:
+        open_countries.append(country_object.text)
+        open_countries.sort()
+    return open_countries
 
 
 def parse_conditions_rosturizm(html, country_arr):
@@ -36,21 +57,23 @@ def parse_conditions_rosturizm(html, country_arr):
 def get_conditions(info_block):
     country_conditions = {}
     conditions_info = info_block.findAll('strong')
-    log.logging.debug(type(conditions_info))
+    log.logging.info(conditions_info)
     for i in conditions_info:
-        if i.text.startswith('Транспортное'):
+        text_without_spaces = i.text.strip()
+        if text_without_spaces.startswith('Транспортное'):
             country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
-        elif i.text.startswith('Прямое'):
+        elif text_without_spaces.startswith('Прямое'):
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        elif i.text == 'Авиасообщение с пересадками':
+        elif text_without_spaces == 'Авиасообщение с пересадками':
             country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
         else:
-            if i.text == 'Ограничения:':
+            if text_without_spaces.startswith('Ограничения'): 
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-            elif i.text == 'Полезные телефоны':
-                pass
+            elif text_without_spaces.startswith('Полезные телефоны'):
+                country_conditions['contacts'] = info_block.text.split('Полезные телефоны')[1].strip(string.punctuation).strip()
             else:
+                log.logging.info(text_without_spaces)
                 log.logging.info('Данные об ограничениях не пришли')
                 country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = 'Нет данных'
