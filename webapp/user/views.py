@@ -79,13 +79,15 @@ def get_country_id(country_list):
 
 @blueprint.route('/process_country_from_user_request')
 def process_country_from_user_request():
-    id_arr = int(request.args.get('arr'))
-    id_dep = int(request.args.get('dep'))
-    country_from_db = Country.query.filter_by(id=id_dep).first()
-    select_dep = country_from_db.country_name
-    country_from_db = Country.query.filter_by(id=id_arr).first()
-    select_arr = country_from_db.country_name
+    select_dep = choose_select_by_id('dep')
+    select_arr = choose_select_by_id('arr')
     choice = UserRequest(user_id=current_user.id, country_dep=select_dep, country_arr=select_arr)
     db.session.add(choice)
     db.session.commit()
     return redirect(url_for('country_related.country_request'))
+
+
+def choose_select_by_id(template_id):
+    id = int(request.args.get(template_id))
+    country_from_db = Country.query.filter_by(id=id).first()
+    return country_from_db.country_name
