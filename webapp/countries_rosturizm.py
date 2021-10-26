@@ -38,24 +38,30 @@ def get_conditions(info_block):
     conditions_info = info_block.findAll('strong')
     log.logging.debug(type(conditions_info))
     log.logging.info(conditions_info)
-    for i in conditions_info:
-        if i.text.startswith('Транспортное'):
-            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
-        elif i.text.startswith('Прямое'):
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        elif i.text == 'Авиасообщение с пересадками':
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        else:
-            if i.text.startswith('Ограничения'):
-                country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
-                country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-            elif i.text == 'Полезные телефоны':
-                pass
+    for i in range(len(conditions_info)):
+        if conditions_info[i].text.startswith('Транспортное'):
+            country_conditions['transportation'] = info_block.text.split(
+                                                    'Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
+        elif conditions_info[i].text.startswith('Прямое'):
+            country_conditions['transportation'] = conditions_info[i].text.strip(string.punctuation).strip()
+        elif conditions_info[i].text == 'Авиасообщение с пересадками':
+            country_conditions['transportation'] = conditions_info[i].text.strip(string.punctuation).strip()
+        elif conditions_info[i].text.startswith('Что открыто'):
+            if conditions_info[i + 1].text.startswith('Ограничения'):
+                country_conditions['open_objects'] = info_block.text.split(
+                                                        'Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
+                country_conditions['restrictions'] = info_block.text.split(
+                                                      'Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
             else:
-                # log.logging.info('Данные об ограничениях не пришли')
-                country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
+                country_conditions['open_objects'] = info_block.text.split(
+                                                        'Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
                 country_conditions['restrictions'] = 'Нет данных'
-        country_conditions['visa'] = info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
-        country_conditions['vaccine'] = info_block.text.split('Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()
-        country_conditions['conditions'] = info_block.text.split('Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
+                log.logging.info('Блок Ограничения не найден')
+
+        country_conditions['visa'] = info_block.text.split(
+                                      'Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
+        country_conditions['vaccine'] = info_block.text.split(
+                                         'Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()
+        country_conditions['conditions'] = info_block.text.split(
+                                            'Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
     return country_conditions
