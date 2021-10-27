@@ -2,16 +2,18 @@
 
 {% block content %}
       <h1>{{ page_title }}</h1>
-      привет, {{ user_name }}
+      Привет, {{ user_name }}. Здесь последние 25 ваших запросов.
         <div class="row">
             <div class="col-8">
                {% include "messages.html" %}
                <ol>
-                    {% for i in all_user_requests %}
-                        <li><a href="{{ i.country_arr }}">
-                            Страна отправления: {{ i.country_dep }}
-                            Страна прибытия: {{ i.country_arr }} </a></li>
-                                          
+                    {% for user_request in all_user_requests %}
+                        <li><a href="{{ url_for('user_related.process_country_from_user_request',
+                                                 dep=country_to_id_mapping[user_request.country_dep],
+                                                 arr=country_to_id_mapping[user_request.country_arr]) }}">
+                            Страна отправления: {{ user_request.country_dep }}
+                            Страна прибытия: {{ user_request.country_arr }} </a></li>
+
                     {% endfor %}
                 </ol>
             </div>

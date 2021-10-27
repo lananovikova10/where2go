@@ -46,7 +46,6 @@ def get_accepted_countries(html):
 def parse_conditions_rosturizm(html, country_arr):
     soup = BeautifulSoup(html, 'html.parser')
     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
-    log.logging.debug(all_published_country)
     for item in all_published_country:
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')

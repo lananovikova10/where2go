@@ -5,6 +5,9 @@
 Сведения выводятся на основании опубликованных данных [Ростуризма](https://city.russia.travel/safety/kakie_strany_otkryty/).
 
 ## Для локального запуска
+Склонировать репозиторий, создать в этой директории виртуальное окружение, установить зависимости  pip install -r requirements.txt. 
+Получить у автора файл config.py, поместить его в папку webapp
+
 1. запуск: 
 * Linux и Mac: `export FLASK_APP=webapp && export FLASK_ENV=development && flask run`
 * Windows: `set FLASK_APP=webapp && set FLASK_ENV=development && set FLASK_DEBUG=1 && flask run`

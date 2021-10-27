@@ -34,7 +34,7 @@ def process_country():
         db.session.commit()
         country = Country.query.filter_by(country_name=select_arr).first()
         log.logging.info(country.id)
-        return redirect(url_for('country_related.country_request', identifier=country.id))
+        return redirect(url_for('country_related.country_request'))
     else: 
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
@@ -54,9 +54,9 @@ def process_country_from_list():
     return redirect(url_for('country_related.country_request', identifier=id))
 
 
-@blueprint.route('/country_request/<identifier>')
+@blueprint.route('/country_request')
 @login_required
-def country_request(identifier):
+def country_request():
     title = f'Актуальная информация по странам'
     que = UserRequest.query.filter(UserRequest.user_id==current_user.id).order_by(UserRequest.id.desc()).limit(1)
     dep = que[0].country_dep
@@ -69,6 +69,7 @@ def country_request(identifier):
                                 covid_data=covid_data)
 
 
+# возвращает кортеж из ответов по условиям для страны или None
 def country_conditions_request(arr):
     restrictions_by_country = get_info_rosturizm(arr)
     log.logging.info(arr)
@@ -83,7 +84,9 @@ def country_conditions_request(arr):
         open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
         conditions = restrictions_by_country.get('conditions', no_data_by_field)
         restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
-        return transportation, visa, vaccine, open_objects, conditions, restrictions
+        log.logging.info(restrictions_by_country)
+        return transportation, visa, vaccine, conditions, open_objects, restrictions
+
 
 def get_open_countries():
     countries_list = get_countries_rosturizm()
@@ -112,6 +115,8 @@ def display_countries_list():
     return render_template('country/country_list.html', page_title=title, countries_list=countries_list,
                             country_to_id_mapping=country_to_id_mapping)
 
+
+# возвращает словарь из ответов по covid для страны
 def country_covid_request(arr):
     country_query = Country.query.filter(Country.country_name==arr).first()
     country_code_resieved = country_query.country_code
