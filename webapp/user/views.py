@@ -65,9 +65,9 @@ def show_user_requests():
                            country_to_id_mapping=country_to_id_mapping)
 
 
-def get_country_id(country_list):
+def get_country_id(all_user_requests):
     country_to_id_mapping = {}
-    for country in country_list:
+    for country in all_user_requests:
         country_from_db = Country.query.filter_by(country_name=country.country_arr).first()
         if country_from_db:
             country_to_id_mapping[country_from_db.country_name] = country_from_db.id
