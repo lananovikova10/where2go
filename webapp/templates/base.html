@@ -14,27 +14,32 @@
     </head>
       <body>
         <div class="container">
-          <nav class="navbar navbar-light bg-light">
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
             <a class="navbar-brand" href="/">Куда поехать</a>
-            <ul class="nav navbar-nav navbar-right">
-              {% if current_user.is_authenticated %}
-              <li><a href="{{ url_for('user_related.logout') }}">Выйти</a></li>
-              <li><a href="/countries/country_list">Открытые страны</a></li>
-              <li><a href="{{ url_for('user_related.show_user_requests') }}">Мои запросы</a></li>
-                {% else %}
-              <li><a href="{{ url_for('user_related.login') }}">Войти</a></li>
-                {% endif %}
-              
-              <li>
-                {% if current_user.is_admin %}
-                <br>
-                <br>
-                <a href="/admin">Админка</a>
-                {% endif %}
-              </li>
-            </ul>
-          </div>
+              <ul class="navbar-nav">
+                  {% if current_user.is_authenticated %}
+                    {% if current_user.is_admin %}
+                    <li class="nav-item">
+                      <a class="nav-link" href="/admin">Админка</a>
+                    </li>
+                    {% endif %}
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('user_related.show_user_requests') }}">Мои запросы</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/countries/country_list">Открытые страны</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('user_related.logout') }}">Выйти</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{{ url_for('user_related.login') }}">Войти</a>
+                  </li>
+                  {% endif %}
+              </ul>
+            </div>
           </nav>
           {% block content %}{% endblock %}
         </div>
