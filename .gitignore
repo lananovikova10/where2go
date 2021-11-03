@@ -2,7 +2,7 @@
 *.log
 .vscode/
 .idea/
-env/
+*env/
 __pycache__/
 config.py
 webapp/config.py
