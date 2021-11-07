@@ -35,7 +35,7 @@ def process_country():
         country = Country.query.filter_by(country_name=select_arr).first()
         log.logging.info(country.id)
         return redirect(url_for('country_related.country_request'))
-    else: 
+    else:
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
 
@@ -69,13 +69,14 @@ def country_request():
                                 covid_data=covid_data)
 
 
-# возвращает кортеж из ответов по условиям для страны или None
+# возвращает кортеж из ответов по условиям для страны или None или кортеж из одного элемента
 def country_conditions_request(arr):
     restrictions_by_country = get_info_rosturizm(arr)
     log.logging.info(arr)
-    no_data_by_field = "У нас пока нет информации"
-    if restrictions_by_country == {}:
-        log.logging.info(restrictions_by_country)
+    no_data_by_field = "Готовим данные к публикации"
+    if restrictions_by_country is None:
+        return no_data_by_field,
+    elif restrictions_by_country == {}:
         return None
     else:
         transportation = restrictions_by_country.get('transportation', no_data_by_field)

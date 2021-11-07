@@ -14,10 +14,14 @@
     </div>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-8">
+            <div class="col-sm-8 col-sm-pull-6">
                 <h4>Условия въезда</h4>
                 {% if restrictions_by_country is none %}
-                        <p><i>Сюда пока нельзя</i></p>
+                    <p><i>Сюда пока нельзя</i></p>
+                {% elif restrictions_by_country|count == 1 %}
+                    <p><i>{{ restrictions_by_country[0] }}<br><br>
+                    <a  target="_blank" href="https://city.russia.travel/safety/kakie_strany_otkryty/">
+                        Более подробная инфомрация здесь</a></i></p>
                 {% else %}
                     <p><b>Как добраться:</b> {{ restrictions_by_country[0] }}</p>
                     <p><b>Нужна ли виза:</b> {{ restrictions_by_country[1] }}</p>
@@ -28,7 +32,7 @@
                     </p>
                 {% endif %}
             </div>
-            <div class="col-4">
+            <div class="col-sm-4 col-sm-push-6">
                 <h4>Сведения о распространении COVID-19</h4>
                 {% if covid_data is none %}
                     <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
