@@ -5,7 +5,7 @@ from flask_login import current_user, login_required
 from webapp.country.forms import CounryChoose, UserRequest, Country
 from webapp import db, covid_api
 from webapp.countries_rosturizm import get_info_rosturizm
-from webapp.countries_rosturizm import get_countries_rosturizm
+from webapp.countries_rosturizm import get_countries_rosturizm, filter_set_of_headers
 from webapp import log
 
 
@@ -35,7 +35,7 @@ def process_country():
         country = Country.query.filter_by(country_name=select_arr).first()
         log.logging.info(country.id)
         return redirect(url_for('country_related.country_request'))
-    else: 
+    else:
         flash('одинаковые страны, попробуйте еще')
         return redirect(url_for('main_page.display'))
 
@@ -69,23 +69,33 @@ def country_request():
                                 covid_data=covid_data)
 
 
-# возвращает кортеж из ответов по условиям для страны или None
 def country_conditions_request(arr):
-    restrictions_by_country = get_info_rosturizm(arr)
+    '''Возвращает кортеж из одного элемента при ошибке подключения,
+    возвращает None при получении пустого словаря,
+    возвращает кортеж из 6 элементов, если получен ожидаемый набор данных,
+    возвращает кортеж из 7 элементов, если неожидаемый набор'''
+    
     log.logging.info(arr)
-    no_data_by_field = "У нас пока нет информации"
-    if restrictions_by_country == {}:
-        log.logging.info(restrictions_by_country)
+    restrictions_by_country = get_info_rosturizm(arr)
+    no_data_by_field = "Ошибка подключения. Обновите страницу"
+    if restrictions_by_country is None:
+        return no_data_by_field,
+    elif restrictions_by_country == {}:
         return None
     else:
-        transportation = restrictions_by_country.get('transportation', no_data_by_field)
-        visa = restrictions_by_country.get('visa', no_data_by_field)
-        vaccine = restrictions_by_country.get('vaccine', no_data_by_field)
-        open_objects = restrictions_by_country.get('open_objects', no_data_by_field)
-        conditions = restrictions_by_country.get('conditions', no_data_by_field)
-        restrictions = restrictions_by_country.get('restrictions', no_data_by_field)
+        restrictions_by_country = get_info_rosturizm(arr)[0]
+        unusual_output_rosturizm = get_info_rosturizm(arr)[1]
+        transportation = restrictions_by_country.get('transportation')
+        visa = restrictions_by_country.get('visa')
+        vaccine = restrictions_by_country.get('vaccine')
+        conditions = restrictions_by_country.get('conditions')
+        open_objects = restrictions_by_country.get('open_objects')
+        restrictions = restrictions_by_country.get('restrictions')
         log.logging.info(restrictions_by_country)
-        return transportation, visa, vaccine, conditions, open_objects, restrictions
+        if not unusual_output_rosturizm:
+            return transportation, visa, vaccine, conditions, open_objects, restrictions
+        else:
+            return transportation, visa, vaccine, conditions, open_objects, restrictions, 'unusual'
 
 
 def get_open_countries():

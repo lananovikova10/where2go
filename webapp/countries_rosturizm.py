@@ -49,34 +49,64 @@ def parse_conditions_rosturizm(html, country_arr):
     for item in all_published_country:
         if item.text == country_arr:
             info_block = item.find_next('div', class_='t-text t-text_md')
-            return get_conditions(info_block)
+            return get_conditions(info_block), filter_set_of_headers(info_block)
     return {}
+
+
+def get_strong_headers(info_block):
+    conditions_info_dirty = info_block.findAll('strong')
+    return [i.text.strip().strip(string.punctuation) for i in conditions_info_dirty]
 
 
 def get_conditions(info_block):
     country_conditions = {}
-    conditions_info = info_block.findAll('strong')
-    log.logging.info(conditions_info)
-    for i in conditions_info:
-        text_without_spaces = i.text.strip()
-        if text_without_spaces.startswith('Транспортное'):
-            country_conditions['transportation'] = info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
-        elif text_without_spaces.startswith('Прямое'):
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        elif text_without_spaces == 'Авиасообщение с пересадками':
-            country_conditions['transportation'] = i.text.strip(string.punctuation).strip()
-        else:
-            if text_without_spaces.startswith('Ограничения'): 
-                country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip()
-                country_conditions['restrictions'] = info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-            elif text_without_spaces.startswith('Полезные телефоны'):
-                country_conditions['contacts'] = info_block.text.split('Полезные телефоны')[1].strip(string.punctuation).strip()
-            else:
-                log.logging.info(text_without_spaces)
-                log.logging.info('Данные об ограничениях не пришли')
-                country_conditions['open_objects'] = info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
-                country_conditions['restrictions'] = 'Нет данных'
-        country_conditions['visa'] = info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
-        country_conditions['vaccine'] = info_block.text.split('Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()
-        country_conditions['conditions'] = info_block.text.split('Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
+    no_data = 'Нет данных'
+    conditions_info = get_strong_headers(info_block)
+    def get_transportation():
+        for i in conditions_info:
+            if i.startswith('Транспортное'):
+                return info_block.text.split('Транспортное сообщение')[1].split('Виза')[0].strip(string.punctuation).strip()
+            elif i.startswith('Прямое') or i.startswith('Авиасообщение с пересадками'):
+                return i
+            return no_data
+
+    def get_open_objects_and_restrictions():
+        if 'Ограничения' in conditions_info and 'Что открыто' in conditions_info:
+            return info_block.text.split('Что открыто')[1].split('Ограничения')[0].strip(string.punctuation).strip(), \
+                    info_block.text.split('Ограничения')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip()
+        elif 'Что открыто' in conditions_info:
+            return info_block.text.split('Что открыто')[1].split('Полезные телефоны')[0].strip(string.punctuation).strip(), \
+                    no_data
+
+    def get_visa():
+        if 'Виза' in info_block.text and 'Условия въезда' in info_block.text:
+            return info_block.text.split('Виза')[1].split('Условия въезда')[0].strip(string.punctuation).strip()
+        return no_data
+
+    def get_vaccine():
+        if 'Какие вакцины признаются' in info_block.text and 'Что открыто' in info_block.text:
+            return info_block.text.split('Какие вакцины признаются')[1].split('Что открыто')[0].strip(string.punctuation).strip()
+        return no_data
+
+    def get_conditions():
+        if 'Условия въезда' in info_block.text and 'Какие вакцины признаются' in info_block.text:
+            return info_block.text.split('Условия въезда')[1].split('Какие вакцины признаются')[0].strip(string.punctuation).strip()
+        return no_data
+
+    country_conditions['transportation'] = get_transportation()
+    country_conditions['open_objects'] = get_open_objects_and_restrictions()[0]
+    country_conditions['restrictions'] = get_open_objects_and_restrictions()[1]
+    country_conditions['visa'] = get_visa()
+    country_conditions['vaccine'] = get_vaccine() 
+    country_conditions['conditions'] = get_conditions()
     return country_conditions
+
+
+def filter_set_of_headers(info_block):
+    headers_for_country = set(get_strong_headers(info_block))
+    headers_pattern = ('Прямое авиасообщение', 'Транспортное сообщение', 'Авиасообщение с пересадками',
+               'Виза', 'Условия въезда', 'Какие вакцины признаются', 'Что открыто', 'Ограничения', 'Полезные телефоны')
+    if headers_for_country.issubset(headers_pattern):
+        return False
+    else:
+        return True

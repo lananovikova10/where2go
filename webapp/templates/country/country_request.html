@@ -5,7 +5,7 @@
     <div class="row">
         <div class="col-sm-9-center">
             {% include "messages.html" %}
-            <p><h5>Ваш запрос:</h5></p>
+            <h5 class="text-muted">Ваш запрос:</h5>
         </div>
         <div class="col-sm-12-center">
             <p><h3>Страна отправления: {{ country_dep }}</p>
@@ -13,11 +13,14 @@
         </div>
     </div>
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-8">
-                <h4>Условия въезда</h4>
+        <div  class="p-3 mb-2 bg-light text-dark row justify-content-center">
+            <div class="col-sm-8 col-sm-pull-6">
+                <h4 class="text-muted">Условия въезда</h4>
+
                 {% if restrictions_by_country is none %}
-                        <p><i>Сюда пока нельзя</i></p>
+                    <p><i>Сюда пока нельзя</i></p>
+                {% elif restrictions_by_country|count == 1 %}
+                    <p><i>{{ restrictions_by_country[0] }}</i></p>
                 {% else %}
                     <p><b>Как добраться:</b> {{ restrictions_by_country[0] }}</p>
                     <p><b>Нужна ли виза:</b> {{ restrictions_by_country[1] }}</p>
@@ -26,9 +29,15 @@
                     <p><b>Что открыто:</b> {{ restrictions_by_country[4] }}</p>
                     <p><b>Ограничения:</b> {{ restrictions_by_country[5] }}</p>
                     </p>
+                    {% if restrictions_by_country|count == 7 %}
+                    <p class="text-warning"><b>Выше представлены обобщенные сведения</b></p>
+                    <h5><i><a  target="_blank" href="https://city.russia.travel/safety/kakie_strany_otkryty/">
+                        Более подробная инфомрация здесь</a></i></h5><br>
+                    {% endif %}
                 {% endif %}
+
             </div>
-            <div class="col-4">
+            <div class="col-sm-4 col-sm-push-6">
                 <h4>Сведения о распространении COVID-19</h4>
                 {% if covid_data is none %}
                     <p><i>Сетевая ошибка, повторите запрос позднее</i></p>
