@@ -4,7 +4,7 @@ from flask_login import current_user, login_required
 
 from webapp.country.forms import CounryChoose, UserRequest, Country
 from webapp import db, covid_api
-from webapp.countries_rosturizm import get_info_rosturizm
+from webapp.countries_rosturizm import get_tuple_info_rosturizm
 from webapp.countries_rosturizm import get_countries_rosturizm, filter_set_of_headers
 from webapp import log
 
@@ -70,21 +70,21 @@ def country_request():
 
 
 def country_conditions_request(arr):
-    '''Возвращает кортеж из одного элемента при ошибке подключения,
-    возвращает None при получении пустого словаря,
+    '''Возвращает кортеж из 1 элемента при ошибке подключения,
+    возвращает None при отсутствии страны на сайте Ростуризма,
     возвращает кортеж из 6 элементов, если получен ожидаемый набор данных,
     возвращает кортеж из 7 элементов, если неожидаемый набор'''
-    
+
     log.logging.info(arr)
-    restrictions_by_country = get_info_rosturizm(arr)
+    restrictions_by_country = get_tuple_info_rosturizm(arr)
     no_data_by_field = "Ошибка подключения. Обновите страницу"
     if restrictions_by_country is None:
         return no_data_by_field,
     elif restrictions_by_country == {}:
         return None
     else:
-        restrictions_by_country = get_info_rosturizm(arr)[0]
-        unusual_output_rosturizm = get_info_rosturizm(arr)[1]
+        restrictions_by_country = get_tuple_info_rosturizm(arr)[0]
+        unusual_output_rosturizm = get_tuple_info_rosturizm(arr)[1]
         transportation = restrictions_by_country.get('transportation')
         visa = restrictions_by_country.get('visa')
         vaccine = restrictions_by_country.get('vaccine')

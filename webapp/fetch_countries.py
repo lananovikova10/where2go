@@ -34,7 +34,7 @@ def fetch_country_data():
 def parse_country_data():
     list_of_countries = fetch_country_data()
     for country_object in list_of_countries:
-        try: 
+        try:
             country_code = country_object.get('id')
             country_name = country_object.get('name')
             country_name = country_name.replace("и\u0306", "й")
