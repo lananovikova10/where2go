@@ -53,17 +53,8 @@ def parse_conditions_rosturizm(html, country_arr):
             return item.find_next('div', class_='t-text t-text_md')
     return {}
 
-# def parse_conditions_rosturizm(html, country_arr):
-#     soup = BeautifulSoup(html, 'html.parser')
-#     all_published_country = soup.findAll('div', class_='t336__title t-title t-title_md', field="title")
-#     for item in all_published_country:
-#         if item.text == country_arr:
-#             info_block = item.find_next('div', class_='t-text t-text_md')
-#             return get_conditions(info_block), filter_set_of_headers(info_block)
-#     return {}
 
-
-def get_strong_tag_headers(info_block):
+def get_clear_strong_tag_headers(info_block):
     conditions_info_dirty = info_block.findAll('strong')
     return [i.text.strip().strip(string.punctuation) for i in conditions_info_dirty]
 
@@ -103,7 +94,7 @@ def get_detailed_conditions(info_block):
 def get_conditions(info_block):
     country_conditions = {}
     no_data = 'Нет данных'
-    conditions_info = get_strong_tag_headers(info_block)
+    conditions_info = get_clear_strong_tag_headers(info_block)
     country_conditions['transportation'] = get_transportation(conditions_info, info_block) or no_data
     country_conditions['open_objects'] = get_open_objects_and_restrictions(conditions_info,
                                                                     info_block, no_data)[0] or no_data
@@ -116,7 +107,7 @@ def get_conditions(info_block):
 
 
 def filter_set_of_headers(info_block):
-    headers_for_country = set(get_strong_tag_headers(info_block))
+    headers_for_country = set(get_clear_strong_tag_headers(info_block))
     headers_pattern = ('Прямое авиасообщение', 'Транспортное сообщение', 'Авиасообщение с пересадками',
                'Виза', 'Условия въезда', 'Какие вакцины признаются', 'Что открыто', 'Ограничения', 'Полезные телефоны')
     return not headers_for_country.issubset(headers_pattern)
