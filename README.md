@@ -27,4 +27,5 @@
     Файл config.py должен быть в .gitignore
 
 4. При изменениях структуры БД делаем миграцию `flask db migrate -m "коммент что сделали"`, чтобы получить изменения перед началом работы делаем `flask db upgrade`
-5. Чтобы заполнить базу со странами, добавьте в Config COUNTRY_API_KEY и запустите скрипт get_countries.py.
+
+5. Чтобы заполнить базу со странами, добавьте в Config COUNTRY_API_KEY, запустите скрипт clear_countries.py, а затем - get_countries.py.

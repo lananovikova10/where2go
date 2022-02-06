@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-        <h1>{{ page_title }}</h1>
-          <div class="row">
-            <div class="col-sm-9">
-              Привет! Этот сайт поможет вам сориентироваться, куда можно поехать из России, а куда нельзя. Или что-то в таком роде. Или в другом.
-              {% include "messages.html" %}
-              <div class="row">
-                <div class="col-9 col-sm-9">
-                  <form action="{{ url_for('country_related.check_signin') }}" method="POST">
-                    {{ form.hidden_tag() }}
-                    <h3>{{ form.country_dep.label }}:</h3>
-                      {{ form.country_dep() }}
-                    <h3>{{ form.country_arr.label }}:</h3>
-                      {{ form.country_arr() }}
-                    <p>
-                      {{ form.submit() }}
-                    </p>
-                  </form>
-                </div>
-            </div>
-          </div>
+<h1>{{ page_title }}</h1>
+  <div class="row">
+    <div class="col-sm-9">
+      Привет! Этот сайт поможет вам сориентироваться, куда можно поехать из России, а куда нельзя. Или что-то в таком роде. Или в другом.
+      {% include "messages.html" %}
+      <div class="row">
+        <div class="col-9 col-sm-9">
+          <form action="{{ url_for('country_related.check_signin') }}" method="POST">
+            {{ form.hidden_tag() }}
+            <h3>{{ form.country_dep.label }}:</h3>
+              {{ form.country_dep() }}
+            <h3>{{ form.country_arr.label }}:</h3>
+              {{ form.country_arr() }}
+            <p>
+              {{ form.submit() }}
+            </p>
+          </form>
+        </div>
+    </div>
+  </div>
 {% endblock %}
